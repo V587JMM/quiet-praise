@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="zh">
 <head>
@@ -6,60 +7,115 @@
   <title>Quiet Praise</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f9f9f9;
-      color: #333;
-      margin: 0;
-      padding: 2rem;
+      font-family: "Segoe UI", sans-serif;
+      background-color: #f7f7f7;
+      padding: 40px;
+      text-align: center;
     }
     h1 {
-      font-size: 2rem;
-      text-align: center;
-      margin-bottom: 1.5rem;
+      font-size: 2.5em;
+      margin-bottom: 20px;
     }
-    .player-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+    .player {
+      margin-bottom: 30px;
     }
-    audio {
-      width: 100%;
-      max-width: 600px;
-      margin-bottom: 1rem;
+    .controls button {
+      margin: 0 5px;
+      padding: 10px 14px;
+      font-size: 14px;
+      cursor: pointer;
     }
     .lyrics {
-      background-color: #fff;
-      padding: 1rem;
-      border-radius: 10px;
       max-width: 600px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    .lyrics p {
-      margin: 0.5rem 0;
-      line-height: 1.6;
+      margin: 0 auto;
+      padding: 20px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+      text-align: left;
+      white-space: pre-wrap;
     }
   </style>
 </head>
 <body>
   <h1>Quiet Praise</h1>
 
-  <div class="player-container">
-    <audio controls>
-      <source src="https://lqxw-audio.oss-cn-beijing.aliyuncs.com/%E7%AC%AC260%E9%A6%96%20%E5%87%A1%E4%BA%8B%E9%83%BD%E6%9C%89%E7%A5%9E%E7%9A%84%E7%BE%8E%E6%84%8F.mp3" type="audio/mp3">
-      您的浏览器不支持 audio 标签。
+  <div class="player">
+    <audio id="audioPlayer" controls preload="metadata">
+      <source src="https://lqxw-audio.oss-cn-beijing.aliyuncs.com/第260首 凡事都有神的美意.mp3" type="audio/mp3" />
+      Your browser does not support the audio element.
     </audio>
-
-    <div class="lyrics">
-      <p>我以喜樂的心來面對我的環境，</p>
-      <p>我以平安的心來應對我的處境，</p>
-      <p>因為凡事都有神的美意，</p>
-      <p>我要讚美堅持到底。</p>
-      <br/>
-      <p>我以盼望的心來面對我的失望，</p>
-      <p>我以積極的心來戰勝我的沮喪，</p>
-      <p>因為凡事都有神的美意，</p>
-      <p>我要感恩稱謝到底。</p>
+    <div class="controls">
+      <button onclick="setMode('order')">顺序播放</button>
+      <button onclick="setMode('random')">随机播放</button>
+      <button onclick="setMode('repeat')">单曲循环</button>
     </div>
   </div>
+
+  <div class="lyrics" id="lyricsBox">
+    我以喜樂的心來面對我的環境，
+    我以平安的心來應對我的處境，
+    因為凡事都有神的美意，
+    我要讚美堅持到底。
+
+    我以盼望的心來面對我的失望，
+    我以積極的心來戰勝我的沮喪，
+    因為凡事都有神的美意，
+    我要感恩稱謝到底。
+  </div>
+
+<script>
+  const songs = [
+    {
+      src: "https://lqxw-audio.oss-cn-beijing.aliyuncs.com/第260首 凡事都有神的美意.mp3",
+      lyrics: `我以喜樂的心來面對我的環境，
+我以平安的心來應對我的處境，
+因為凡事都有神的美意，
+我要讚美堅持到底。
+
+我以盼望的心來面對我的失望，
+我以積極的心來戰勝我的沮喪，
+因為凡事都有神的美意，
+我要感恩稱謝到底。`
+    },
+    {
+      src: "https://lqxw-audio.oss-cn-beijing.aliyuncs.com/第559首 这是我的手.mp3",
+      lyrics: `占位歌词：这是我的手`
+    },
+    {
+      src: "https://lqxw-audio.oss-cn-beijing.aliyuncs.com/第109首 求你开我信心的眼睛.mp3",
+      lyrics: `占位歌词：求你开我信心的眼睛`
+    }
+  ];
+
+  let current = 0;
+  let mode = "order"; // order | random | repeat
+
+  const player = document.getElementById("audioPlayer");
+  const lyricsBox = document.getElementById("lyricsBox");
+
+  player.addEventListener("ended", () => {
+    if (mode === "repeat") {
+      player.currentTime = 0;
+      player.play();
+    } else if (mode === "random") {
+      current = Math.floor(Math.random() * songs.length);
+    } else {
+      current = (current + 1) % songs.length;
+    }
+    updateSong();
+  });
+
+  function setMode(m) {
+    mode = m;
+    alert("播放模式已设为：" + {order: "顺序播放", random: "随机播放", repeat: "单曲循环"}[m]);
+  }
+
+  function updateSong() {
+    player.src = songs[current].src;
+    lyricsBox.innerText = songs[current].lyrics;
+    player.play();
+  }
+</script>
 </body>
 </html>
