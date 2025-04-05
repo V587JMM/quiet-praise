@@ -97,7 +97,9 @@
     <div class="controls">
       <button onclick="prevSong()">上一首</button>
       <button onclick="nextSong()">下一首</button>
-      <button onclick="shuffleSong()">随机播放</button>
+      <button onclick="toggleShuffle()" id="shuffle-btn">随机播放</button>
+      <button onclick="toggleLoop()" id="loop-btn">单曲循环：关闭</button>
+      <button onclick="disableShuffle()" id="order-btn" style="display: none">顺序播放</button>
     </div>
 
     <div class="lyrics" id="lyrics"></div>
@@ -113,11 +115,15 @@
 
     let songs = [];
     let current = 0;
+    let isShuffle = false;
 
     const audio = document.getElementById("audio");
     const lyricsBox = document.getElementById("lyrics");
     const playlist = document.getElementById("playlist");
     const currentTitle = document.getElementById("current-title");
+    const shuffleBtn = document.getElementById("shuffle-btn");
+    const loopBtn = document.getElementById("loop-btn");
+    const orderBtn = document.getElementById("order-btn");
 
     async function fetchSongs() {
       const res = await fetch(NOTION_JSON_URL);
@@ -150,9 +156,13 @@
     }
 
     function nextSong() {
-      current = (current + 1) % songs.length;
-      loadSong(current);
-      audio.play();
+      if (isShuffle) {
+        shuffleSong();
+      } else {
+        current = (current + 1) % songs.length;
+        loadSong(current);
+        audio.play();
+      }
     }
 
     function prevSong() {
@@ -178,6 +188,27 @@
         li.style.fontWeight = i === index ? "bold" : "normal";
       });
     }
+
+    function toggleLoop() {
+      audio.loop = !audio.loop;
+      loopBtn.textContent = `单曲循环：${audio.loop ? "开启" : "关闭"}`;
+    }
+
+    function toggleShuffle() {
+      isShuffle = true;
+      shuffleBtn.style.display = "none";
+      orderBtn.style.display = "inline-block";
+    }
+
+    function disableShuffle() {
+      isShuffle = false;
+      shuffleBtn.style.display = "inline-block";
+      orderBtn.style.display = "none";
+    }
+
+    audio.onended = () => {
+      if (!audio.loop) nextSong();
+    };
 
     fetchSongs();
   </script>
