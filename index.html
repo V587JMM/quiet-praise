@@ -24,7 +24,12 @@
     }
     .subtitle {
       font-size: 1.2rem;
-      margin-bottom: 2rem;
+      margin-bottom: 1rem;
+    }
+    .current-song {
+      font-size: 1.4rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
     }
     audio {
       width: 100%;
@@ -59,6 +64,10 @@
     }
     .song-list {
       margin-top: 1rem;
+      text-align: left;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
     }
     details summary {
       cursor: pointer;
@@ -67,8 +76,8 @@
       margin: 1rem;
     }
     ul {
-      list-style: none;
-      padding: 0;
+      list-style: decimal;
+      padding-left: 1.5rem;
     }
     li {
       margin: 0.5rem 0;
@@ -81,6 +90,7 @@
   <div class="overlay">
     <h1>Quiet Praise</h1>
     <p class="subtitle">愿你在旋律中与主相遇，安静灵里，得着安慰与力量 🕊️</p>
+    <p class="current-song" id="current-title"></p>
 
     <audio id="audio" controls></audio>
 
@@ -107,6 +117,7 @@
     const audio = document.getElementById("audio");
     const lyricsBox = document.getElementById("lyrics");
     const playlist = document.getElementById("playlist");
+    const currentTitle = document.getElementById("current-title");
 
     async function fetchSongs() {
       const res = await fetch(NOTION_JSON_URL);
@@ -119,7 +130,7 @@
       playlist.innerHTML = "";
       songs.forEach((song, index) => {
         const li = document.createElement("li");
-        li.textContent = song.title;
+        li.textContent = `${index + 1}. ${song.title}`;
         li.onclick = () => {
           current = index;
           loadSong(current);
@@ -134,6 +145,7 @@
       const song = songs[index];
       audio.src = song.src;
       lyricsBox.textContent = song.lyrics;
+      currentTitle.textContent = `🎵 当前播放：${song.title}`;
       highlightPlaylist(index);
     }
 
@@ -150,6 +162,7 @@
     }
 
     function shuffleSong() {
+      if (songs.length < 2) return;
       let rand;
       do {
         rand = Math.floor(Math.random() * songs.length);
