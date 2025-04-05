@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Quiet Praise</title>
+  <title>Quiet Praise｜泉芯</title>
   <style>
     body {
       margin: 0;
@@ -80,7 +80,7 @@
 <body>
   <div class="overlay">
     <h1>Quiet Praise</h1>
-    <p class="subtitle">愿这清晨的敬拜伴你安静地开始新的一天 🕊️</p>
+    <p class="subtitle">愿你在旋律中与主相遇，安静灵里，得着安慰与力量 🕊️</p>
 
     <audio id="audio" controls></audio>
 
@@ -99,41 +99,38 @@
   </div>
 
   <script>
-    const songs = [
-      {
-        title: "凡事都有神的美意",
-        src: "https://lqxw-audio.oss-cn-beijing.aliyuncs.com/%E7%AC%AC260%E9%A6%96%20%E5%87%A1%E4%BA%8B%E9%83%BD%E6%9C%89%E7%A5%9E%E7%9A%84%E7%BE%8E%E6%84%8F.mp3",
-        lyrics: `我以喜樂的心來面對我的環境，
-我以平安的心來應對我的處境，
-因為凡事都有神的美意，
-我要讚美堅持到底。
+    const NOTION_JSON_URL = "https://lqxw-audio.oss-cn-beijing.aliyuncs.com/quiet-praise-data.json";
 
-我以盼望的心來面對我的失望，
-我以積極的心來戰勝我的沮喪，
-因為凡事都有神的美意，
-我要感恩稱謝到底。`
-      },
-      {
-        title: "这是我的手",
-        src: "https://lqxw-audio.oss-cn-beijing.aliyuncs.com/%E7%AC%AC559%E9%A6%96%20%E8%BF%99%E6%98%AF%E6%88%91%E7%9A%84%E6%89%8B.mp3",
-        lyrics: `主再来的日子已临近
-神的儿女当祷告警醒……（此处省略完整版）`
-      },
-      {
-        title: "求你开我信心的眼睛",
-        src: "https://lqxw-audio.oss-cn-beijing.aliyuncs.com/%E7%AC%AC109%E9%A6%96%20%E6%B1%82%E4%BD%A0%E5%BC%80%E6%88%91%E4%BF%A1%E5%BF%83%E7%9A%84%E7%9C%BC%E7%9D%9B%281%29.mp3",
-        lyrics: `求你开我信心的眼睛
-让我能够注目仰望你
-求你牵着我的手……（此处省略完整版）`
-      }
-    ];
-
+    let songs = [];
     let current = 0;
+
     const audio = document.getElementById("audio");
     const lyricsBox = document.getElementById("lyrics");
     const playlist = document.getElementById("playlist");
 
+    async function fetchSongs() {
+      const res = await fetch(NOTION_JSON_URL);
+      songs = await res.json();
+      renderPlaylist();
+      loadSong(current);
+    }
+
+    function renderPlaylist() {
+      playlist.innerHTML = "";
+      songs.forEach((song, index) => {
+        const li = document.createElement("li");
+        li.textContent = song.title;
+        li.onclick = () => {
+          current = index;
+          loadSong(current);
+          audio.play();
+        };
+        playlist.appendChild(li);
+      });
+    }
+
     function loadSong(index) {
+      if (!songs[index]) return;
       const song = songs[index];
       audio.src = song.src;
       lyricsBox.textContent = song.lyrics;
@@ -169,18 +166,7 @@
       });
     }
 
-    songs.forEach((song, index) => {
-      const li = document.createElement("li");
-      li.textContent = song.title;
-      li.onclick = () => {
-        current = index;
-        loadSong(index);
-        audio.play();
-      };
-      playlist.appendChild(li);
-    });
-
-    loadSong(current);
+    fetchSongs();
   </script>
 </body>
 </html>
