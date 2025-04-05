@@ -1,121 +1,223 @@
-
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Quiet Praise</title>
-  <style>
-    body {
-      font-family: "Segoe UI", sans-serif;
-      background-color: #f7f7f7;
-      padding: 40px;
-      text-align: center;
-    }
-    h1 {
-      font-size: 2.5em;
-      margin-bottom: 20px;
-    }
-    .player {
-      margin-bottom: 30px;
-    }
-    .controls button {
-      margin: 0 5px;
-      padding: 10px 14px;
-      font-size: 14px;
-      cursor: pointer;
-    }
-    .lyrics {
-      max-width: 600px;
-      margin: 0 auto;
-      padding: 20px;
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 0 8px rgba(0,0,0,0.1);
-      text-align: left;
-      white-space: pre-wrap;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiet Praise</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            background-color: #f4f4f4;
+        }
+
+        h1 {
+            margin-top: 30px;
+            font-size: 36px;
+            color: #333;
+        }
+
+        .lyrics-container {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        audio {
+            margin-top: 20px;
+            width: 90%;
+            border-radius: 5px;
+        }
+
+        .lyrics {
+            margin-top: 20px;
+            white-space: pre-line;
+            font-size: 18px;
+            color: #555;
+            line-height: 1.8;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #playButton {
+            background-color: #4CAF50;
+        }
+
+        #pauseButton {
+            background-color: #f44336;
+        }
+
+        .song-list {
+            margin-top: 30px;
+            font-size: 18px;
+            color: #333;
+        }
+
+        .song-item {
+            cursor: pointer;
+            margin: 10px;
+            color: #1E90FF;
+        }
+
+        .song-item:hover {
+            text-decoration: underline;
+        }
+
+        .controls-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .controls-container button {
+            margin: 0 10px;
+        }
+
+        .progress-container {
+            margin-top: 20px;
+            width: 90%;
+        }
+
+        .progress-container input {
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
-  <h1>Quiet Praise</h1>
+    <h1>Quiet Praise</h1>
 
-  <div class="player">
-    <audio id="audioPlayer" controls preload="metadata">
-      <source src="https://lqxw-audio.oss-cn-beijing.aliyuncs.com/第260首 凡事都有神的美意.mp3" type="audio/mp3" />
-      Your browser does not support the audio element.
-    </audio>
-    <div class="controls">
-      <button onclick="setMode('order')">顺序播放</button>
-      <button onclick="setMode('random')">随机播放</button>
-      <button onclick="setMode('repeat')">单曲循环</button>
+    <!-- Song List -->
+    <div class="song-list">
+        <div class="song-item" onclick="changeSong('https://lqxw-audio.oss-cn-beijing.aliyuncs.com/%E7%AC%AC260%E9%A6%96%20%E5%87%A1%E4%BA%8B%E9%83%BD%E6%9C%89%E7%A5%9E%E7%9A%84%E7%BE%8E%E6%84%8F.mp3', '凡事都有神的美意')">凡事都有神的美意</div>
+        <div class="song-item" onclick="changeSong('https://lqxw-audio.oss-cn-beijing.aliyuncs.com/%E7%AC%AC559%E9%A6%96%20%E8%BF%99%E6%98%AF%E6%88%91%E7%9A%84%E6%89%8B.mp3', '这是我的手')">这是我的手</div>
+        <div class="song-item" onclick="changeSong('https://lqxw-audio.oss-cn-beijing.aliyuncs.com/%E7%AC%AC109%E9%A6%96%20%E6%B1%82%E4%BD%A0%E5%BC%80%E6%88%91%E4%BF%A1%E5%BF%83%E7%9A%84%E7%9C%BC%E7%9D%9B%281%29.mp3', '求你开我信心的眼睛')">求你开我信心的眼睛</div>
+        <!-- Add more songs as needed -->
     </div>
-  </div>
 
-  <div class="lyrics" id="lyricsBox">
-    我以喜樂的心來面對我的環境，
-    我以平安的心來應對我的處境，
-    因為凡事都有神的美意，
-    我要讚美堅持到底。
+    <!-- Audio Player and Lyrics -->
+    <div class="lyrics-container">
+        <audio id="audioPlayer" controls>
+            <source id="audioSource" src="https://lqxw-audio.oss-cn-beijing.aliyuncs.com/%E7%AC%AC260%E9%A6%96%20%E5%87%A1%E4%BA%8B%E9%83%BD%E6%9C%89%E7%A5%9E%E7%9A%84%E7%BE%8E%E6%84%8F.mp3" type="audio/mp3">
+            Your browser does not support the audio element.
+        </audio>
+        <div class="lyrics" id="lyrics">
+            凡事都有神的美意
+            我以喜乐的心来面对白我的环境，  
+            我以平安的心来应对白我的处境，  
+            因为凡事都有神的美意，  
+            我要赞美坚持到底。  
+            ...
+        </div>
+    </div>
 
-    我以盼望的心來面對我的失望，
-    我以積極的心來戰勝我的沮喪，
-    因為凡事都有神的美意，
-    我要感恩稱謝到底。
-  </div>
+    <!-- Controls -->
+    <div class="controls-container">
+        <button id="playButton">Play</button>
+        <button id="pauseButton">Pause</button>
+        <button onclick="previousSong()">上一首</button>
+        <button onclick="nextSong()">下一首</button>
+    </div>
 
-<script>
-  const songs = [
-    {
-      src: "https://lqxw-audio.oss-cn-beijing.aliyuncs.com/第260首 凡事都有神的美意.mp3",
-      lyrics: `我以喜樂的心來面對我的環境，
-我以平安的心來應對我的處境，
-因為凡事都有神的美意，
-我要讚美堅持到底。
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <input type="range" id="progressBar" value="0" step="1" max="100" onchange="changeProgress(this.value)">
+    </div>
 
-我以盼望的心來面對我的失望，
-我以積極的心來戰勝我的沮喪，
-因為凡事都有神的美意，
-我要感恩稱謝到底。`
-    },
-    {
-      src: "https://lqxw-audio.oss-cn-beijing.aliyuncs.com/第559首 这是我的手.mp3",
-      lyrics: `占位歌词：这是我的手`
-    },
-    {
-      src: "https://lqxw-audio.oss-cn-beijing.aliyuncs.com/第109首 求你开我信心的眼睛.mp3",
-      lyrics: `占位歌词：求你开我信心的眼睛`
-    }
-  ];
+    <script>
+        var audioPlayer = document.getElementById('audioPlayer');
+        var playButton = document.getElementById('playButton');
+        var pauseButton = document.getElementById('pauseButton');
+        var audioSource = document.getElementById('audioSource');
+        var lyricsContainer = document.getElementById('lyrics');
+        var progressBar = document.getElementById('progressBar');
 
-  let current = 0;
-  let mode = "order"; // order | random | repeat
+        var songs = [
+            {
+                src: "https://lqxw-audio.oss-cn-beijing.aliyuncs.com/%E7%AC%AC260%E9%A6%96%20%E5%87%A1%E4%BA%8B%E9%83%BD%E6%9C%89%E7%A5%9E%E7%9A%84%E7%BE%8E%E6%84%8F.mp3",
+                title: "凡事都有神的美意",
+                lyrics: `凡事都有神的美意\n我以喜乐的心来面对白我的环境，\n我以平安的心来应对白我的处境，\n因为凡事都有神的美意，\n我要赞美坚持到底。`
+            },
+            {
+                src: "https://lqxw-audio.oss-cn-beijing.aliyuncs.com/%E7%AC%AC559%E9%A6%96%20%E8%BF%99%E6%98%AF%E6%88%91%E7%9A%84%E6%89%8B.mp3",
+                title: "这是我的手",
+                lyrics: `这是我的手\n主再来的日子已临近\n神的儿女当祷告警醒\n主曾呼召属他的儿女\n当往普天下去传福音...`
+            },
+            {
+                src: "https://lqxw-audio.oss-cn-beijing.aliyuncs.com/%E7%AC%AC109%E9%A6%96%20%E6%B1%82%E4%BD%A0%E5%BC%80%E6%88%91%E4%BF%A1%E5%BF%83%E7%9A%84%E7%9C%BC%E7%9D%9B%281%29.mp3",
+                title: "求你开我信心的眼睛",
+                lyrics: `求你开我信心的眼睛\n让我能够注目仰望你\n求你牵着我的手\n告诉我，告诉我：\n不要害怕，我就在这里...`
+            }
+        ];
 
-  const player = document.getElementById("audioPlayer");
-  const lyricsBox = document.getElementById("lyricsBox");
+        var currentSongIndex = 0;
 
-  player.addEventListener("ended", () => {
-    if (mode === "repeat") {
-      player.currentTime = 0;
-      player.play();
-    } else if (mode === "random") {
-      current = Math.floor(Math.random() * songs.length);
-    } else {
-      current = (current + 1) % songs.length;
-    }
-    updateSong();
-  });
+        function changeSong(songUrl, songTitle) {
+            audioSource.src = songUrl;
+            audioPlayer.load();
+            audioPlayer.play();
+            lyricsContainer.innerHTML = getLyrics(songTitle);
+        }
 
-  function setMode(m) {
-    mode = m;
-    alert("播放模式已设为：" + {order: "顺序播放", random: "随机播放", repeat: "单曲循环"}[m]);
-  }
+        function getLyrics(songTitle) {
+            for (let i = 0; i < songs.length; i++) {
+                if (songs[i].title === songTitle) {
+                    return songs[i].lyrics;
+                }
+            }
+            return '歌词未提供';
+        }
 
-  function updateSong() {
-    player.src = songs[current].src;
-    lyricsBox.innerText = songs[current].lyrics;
-    player.play();
-  }
-</script>
+        function playSong() {
+            audioPlayer.play();
+        }
+
+        function pauseSong() {
+            audioPlayer.pause();
+        }
+
+        function previousSong() {
+            currentSongIndex = (currentSongIndex > 0) ? currentSongIndex - 1 : songs.length - 1;
+            changeSong(songs[currentSongIndex].src, songs[currentSongIndex].title);
+        }
+
+        function nextSong() {
+            currentSongIndex = (currentSongIndex < songs.length - 1) ? currentSongIndex + 1 : 0;
+            changeSong(songs[currentSongIndex].src, songs[currentSongIndex].title);
+        }
+
+        function changeProgress(value) {
+            var duration = audioPlayer.duration;
+            audioPlayer.currentTime = (value / 100) * duration;
+        }
+
+        playButton.onclick = playSong;
+        pauseButton.onclick = pauseSong;
+    </script>
 </body>
 </html>
