@@ -142,6 +142,8 @@
         <button id="pauseButton">Pause</button>
         <button onclick="previousSong()">上一首</button>
         <button onclick="nextSong()">下一首</button>
+        <button onclick="shuffleSongs()">随机播放</button>
+        <button onclick="loopSong()">单曲循环</button>
     </div>
 
     <!-- Progress Bar -->
@@ -209,6 +211,15 @@
         function nextSong() {
             currentSongIndex = (currentSongIndex < songs.length - 1) ? currentSongIndex + 1 : 0;
             changeSong(songs[currentSongIndex].src, songs[currentSongIndex].title);
+        }
+
+        function shuffleSongs() {
+            currentSongIndex = Math.floor(Math.random() * songs.length);
+            changeSong(songs[currentSongIndex].src, songs[currentSongIndex].title);
+        }
+
+        function loopSong() {
+            audioPlayer.loop = !audioPlayer.loop;
         }
 
         function changeProgress(value) {
