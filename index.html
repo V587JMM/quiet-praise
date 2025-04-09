@@ -94,24 +94,30 @@
   margin-top: 5px;
   appearance: none;
   height: 4px;
-  background-color: transparent;
+  background-color: rgba(255, 255, 255, 0.1);  /* 背景底色浅灰半透明 */
   border-radius: 2px;
   outline: none;
-  background-image: linear-gradient(to right, #aaa 0%, #aaa var(--progress), transparent var(--progress), transparent 100%);
+  background-image: linear-gradient(
+    to right,
+    #ccc 0%,
+    #ccc var(--progress),
+    transparent var(--progress),
+    transparent 100%
+  );
   background-size: 100% 100%;
   background-repeat: no-repeat;
   transition: background-image 0.3s ease;
 }
 
     #progressBar::-webkit-slider-thumb {
-      appearance: none;
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: white;
-      cursor: pointer;
-      margin-top: -3px;
-    }
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: white;
+  cursor: pointer;
+  margin-top: -4px;
+}
 
     .lyrics {
       margin-top: 20px;
