@@ -24,6 +24,12 @@
       padding: 20px;
     }
 
+    .song-title {
+      font-size: 26px;
+      margin: 20px 0;
+      color: #fff;
+    }
+
     .album-cover {
       width: 70vw;
       max-width: 280px;
@@ -45,16 +51,10 @@
       }
     }
 
-    .song-title {
-      font-size: 24px;
-      margin: 10px 0;
-      color: #fff;
-    }
-
     .controls {
       display: flex;
-      justify-content: center;
-      margin: 20px 0;
+      justify-content: space-around;
+      margin-top: 10px;
       flex-wrap: wrap;
     }
 
@@ -73,7 +73,7 @@
     }
 
     .progress-container {
-      margin-top: 10px;
+      margin-top: 20px;
     }
 
     .progress-times {
@@ -206,9 +206,8 @@
 </head>
 <body>
   <div class="container">
-    <img id="albumCover" class="album-cover" src="https://lqxw-audio.oss-cn-beijing.aliyuncs.com/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20250409111134.jpg" />
-
     <div class="song-title" id="songTitle">加载中...</div>
+    <img id="albumCover" class="album-cover" src="https://lqxw-audio.oss-cn-beijing.aliyuncs.com/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20250409111134.jpg" />
 
     <div class="controls">
       <button class="control-button" id="prevSong"><i class="fas fa-backward"></i></button>
