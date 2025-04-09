@@ -1,162 +1,6 @@
-<!DOCTYPE html>
-<html lang="zh-Hans">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Quiet Praise</title>
-
-  <!-- Font Awesome 图标库 -->
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-  />
-
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #1e1e1e;
-      color: white;
-      text-align: center;
-      margin: 0;
-      padding: 0;
-    }
-
-    .container {
-      max-width: 800px;
-      margin: 50px auto;
-      padding: 20px;
-      background-color: #333;
-      border-radius: 10px;
-    }
-
-    .album-cover {
-      width: 200px;
-      height: 200px;
-      border-radius: 50%;
-      object-fit: cover;
-      margin-bottom: 20px;
-      border: 5px solid #ffffff;
-      transition: transform 1s linear;
-    }
-
-    .rotate {
-      animation: spin 10s linear infinite;
-    }
-
-    @keyframes spin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-
-    .song-title {
-      font-size: 24px;
-      margin: 10px 0;
-    }
-
-    .controls {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 10px;
-    }
-
-    .control-button {
-      padding: 10px 16px;
-      font-size: 20px;
-      background-color: #444;
-      border: none;
-      border-radius: 50%;
-      color: white;
-      cursor: pointer;
-      transition: background-color 0.3s ease, color 0.3s ease;
-    }
-
-    .control-button:hover,
-    .control-button.active {
-      background-color: #888;
-      color: #fff;
-    }
-
-    .progress-container {
-      margin-top: 10px;
-    }
-
-    .progress-times {
-      display: flex;
-      justify-content: space-between;
-      font-size: 12px;
-      color: #bbb;
-    }
-
-   #progressBar {
-  width: 100%;
-  margin-top: 5px;
-  appearance: none;
-  height: 4px;
-  background-color: rgba(255, 255, 255, 0.1);  /* 背景底色浅灰半透明 */
-  border-radius: 2px;
-  outline: none;
-  background-image: linear-gradient(
-    to right,
-    #ccc 0%,
-    #ccc var(--progress),
-    transparent var(--progress),
-    transparent 100%
-  );
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
-  transition: background-image 0.3s ease;
-}
-
-    #progressBar::-webkit-slider-thumb {
-  appearance: none;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: white;
-  cursor: pointer;
-  margin-top: -4px;
-}
-
-    .lyrics {
-      margin-top: 20px;
-      font-size: 14px;
-      color: #ccc;
-      text-align: left;
-      padding: 10px;
-      border-radius: 5px;
-      background-color: #222;
-      height: 150px;
-      overflow-y: auto;
-      scroll-behavior: smooth;
-    }
-
-    .song-list {
-      margin-top: 30px;
-      text-align: left;
-    }
-
-    .song-list ul {
-      list-style-type: none;
-      padding: 0;
-    }
-
-    .song-list li {
-      margin: 5px 0;
-      cursor: pointer;
-      text-decoration: underline;
-      color: #00bcd4;
-    }
-
-    .song-list li:hover {
-      color: #fff;
-    }
-  </style>
-</head>
 <body>
   <div class="container">
-    <!-- 专辑封面 -->
+    <!-- 唱片封面 -->
     <img
       src="https://lqxw-audio.oss-cn-beijing.aliyuncs.com/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20250409111134.jpg"
       alt="Album Cover"
@@ -164,29 +8,17 @@
       id="albumCover"
     />
 
-    <!-- 歌名标题 -->
+    <!-- 歌名 -->
     <div class="song-title" id="songTitle">你坐着为王</div>
 
-    <!-- 六个控制按钮 -->
+    <!-- 控制按钮 -->
     <div class="controls">
-      <button class="control-button" id="prevSong" title="上一首">
-        <i class="fas fa-backward"></i>
-      </button>
-      <button class="control-button" id="playPause" title="播放 / 暂停">
-        <i class="fas fa-play"></i>
-      </button>
-      <button class="control-button" id="nextSong" title="下一首">
-        <i class="fas fa-forward"></i>
-      </button>
-      <button class="control-button" id="loopMode" title="单曲循环">
-        <i class="fas fa-repeat"></i><sup style="font-size: 10px;">1</sup>
-      </button>
-      <button class="control-button" id="sequenceMode" title="顺序播放">
-        <i class="fas fa-bars"></i>
-      </button>
-      <button class="control-button" id="shuffleMode" title="随机播放">
-        <i class="fas fa-random"></i>
-      </button>
+      <button class="control-button" id="prevSong"><i class="fas fa-backward"></i></button>
+      <button class="control-button" id="playPause"><i class="fas fa-play"></i></button>
+      <button class="control-button" id="nextSong"><i class="fas fa-forward"></i></button>
+      <button class="control-button" id="loopMode"><i class="fas fa-repeat"></i><sup>1</sup></button>
+      <button class="control-button" id="sequenceMode"><i class="fas fa-bars"></i></button>
+      <button class="control-button" id="shuffleMode"><i class="fas fa-random"></i></button>
     </div>
 
     <!-- 播放条 -->
@@ -198,29 +30,137 @@
       <input type="range" id="progressBar" value="0" step="1" min="0" max="100" />
     </div>
 
-    <!-- 歌词展示 -->
-    <div class="lyrics" id="lyricsDisplay">歌词内容...</div>
+    <!-- 歌词页（默认隐藏） -->
+    <div class="lyrics-slide" id="lyricsPanel">
+      <div class="lyrics-header">
+        <button id="closeLyrics" class="control-button"><i class="fas fa-chevron-down"></i></button>
+      </div>
+      <div class="lyrics" id="lyricsDisplay">歌词内容...</div>
+    </div>
 
-    <!-- 歌曲列表 -->
-    <div class="song-list">
-      <ul id="songList"></ul>
+    <!-- 歌单按钮 -->
+    <div class="songlist-toggle">
+      <button id="openSongList"><i class="fas fa-music"></i></button>
+    </div>
+
+    <!-- 歌单弹出层 -->
+    <div class="songlist-popup" id="songListPopup">
+      <div class="songlist-header">
+        <span>歌单</span>
+        <button id="closeSongList"><i class="fas fa-times"></i></button>
+      </div>
+      <ul id="songList" class="song-list-ul"></ul>
     </div>
   </div>
+/* 歌词滑出层 */
+.lyrics-slide {
+  position: fixed;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #1e1e1e;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  transition: top 0.4s ease;
+}
+
+.lyrics-slide.active {
+  top: 0;
+}
+
+.lyrics-header {
+  padding: 10px;
+  text-align: left;
+}
+
+/* 歌单按钮右下角 */
+.songlist-toggle {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 10;
+}
+
+.songlist-toggle button {
+  font-size: 20px;
+  background: #444;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  padding: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+}
+
+/* 歌单弹出层 */
+.songlist-popup {
+  position: fixed;
+  bottom: -80%;
+  left: 0;
+  width: 100%;
+  height: 80%;
+  background-color: #2a2a2a;
+  color: white;
+  z-index: 15;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.4);
+  transition: bottom 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.songlist-popup.active {
+  bottom: 0;
+}
+
+.songlist-header {
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.song-list-ul {
+  overflow-y: auto;
+  padding: 0 20px;
+  list-style: none;
+  flex: 1;
+}
+
+.song-list-ul li {
+  margin: 10px 0;
+  cursor: pointer;
+  color: #ccc;
+  border-bottom: 1px solid #444;
+  padding: 5px 0;
+}
+
+.song-list-ul li:hover,
+.song-list-ul li.active {
+  color: #fff;
+  font-weight: bold;
+}
 <script>
   fetch("https://lqxw-audio.oss-cn-beijing.aliyuncs.com/quiet-praise-data.json")
-    .then((response) => response.json())
+    .then((res) => res.json())
     .then((songsData) => {
       let currentSongIndex = 0;
       let playMode = "sequence";
       const audioPlayer = new Audio(songsData[currentSongIndex].src);
 
-      const progressBar = document.getElementById("progressBar");
-      const currentTimeDisplay = document.getElementById("currentTime");
-      const totalTimeDisplay = document.getElementById("totalTime");
-      const albumCover = document.getElementById("albumCover");
-
       const playPauseBtn = document.getElementById("playPause");
       const playPauseIcon = playPauseBtn.querySelector("i");
+      const progressBar = document.getElementById("progressBar");
+      const albumCover = document.getElementById("albumCover");
+      const currentTimeDisplay = document.getElementById("currentTime");
+      const totalTimeDisplay = document.getElementById("totalTime");
+      const lyricsPanel = document.getElementById("lyricsPanel");
+      const songListPopup = document.getElementById("songListPopup");
 
       const modeButtons = {
         loop: document.getElementById("loopMode"),
@@ -265,12 +205,10 @@
       });
 
       document.getElementById("prevSong").addEventListener("click", () => {
-        if (playMode === "sequence") {
-          currentSongIndex =
-            (currentSongIndex - 1 + songsData.length) % songsData.length;
-        } else if (playMode === "shuffle") {
-          currentSongIndex = Math.floor(Math.random() * songsData.length);
-        }
+        currentSongIndex =
+          playMode === "shuffle"
+            ? Math.floor(Math.random() * songsData.length)
+            : (currentSongIndex - 1 + songsData.length) % songsData.length;
         updateSongDetails();
         audioPlayer.play();
         playPauseIcon.className = "fas fa-pause";
@@ -278,18 +216,16 @@
       });
 
       document.getElementById("nextSong").addEventListener("click", () => {
-        if (playMode === "sequence") {
-          currentSongIndex = (currentSongIndex + 1) % songsData.length;
-        } else if (playMode === "shuffle") {
-          currentSongIndex = Math.floor(Math.random() * songsData.length);
-        }
+        currentSongIndex =
+          playMode === "shuffle"
+            ? Math.floor(Math.random() * songsData.length)
+            : (currentSongIndex + 1) % songsData.length;
         updateSongDetails();
         audioPlayer.play();
         playPauseIcon.className = "fas fa-pause";
         albumCover.classList.add("rotate");
       });
 
-      // 播放模式按钮
       document.getElementById("loopMode").addEventListener("click", () => {
         playMode = "loop";
         audioPlayer.loop = true;
@@ -308,40 +244,56 @@
         updateModeHighlight();
       });
 
-      // 进度条更新
       audioPlayer.addEventListener("timeupdate", () => {
         const current = audioPlayer.currentTime;
         const total = audioPlayer.duration || 0;
-        progressBar.value = (current / total) * 100 || 0;
+        const percent = (current / total) * 100 || 0;
+        progressBar.value = percent;
+        progressBar.style.setProperty("--progress", `${percent}%`);
         currentTimeDisplay.textContent = formatTime(current);
         totalTimeDisplay.textContent = formatTime(total);
       });
 
-      // 拖动进度条
       progressBar.addEventListener("input", () => {
         const total = audioPlayer.duration;
         audioPlayer.currentTime = (progressBar.value / 100) * total;
       });
 
-      // 初始化歌单
+      // 歌词滑出 / 关闭
+      albumCover.addEventListener("click", () => {
+        lyricsPanel.classList.add("active");
+      });
+
+      document.getElementById("closeLyrics").addEventListener("click", () => {
+        lyricsPanel.classList.remove("active");
+      });
+
+      // 歌单弹出 / 关闭
+      document.getElementById("openSongList").addEventListener("click", () => {
+        songListPopup.classList.add("active");
+      });
+
+      document.getElementById("closeSongList").addEventListener("click", () => {
+        songListPopup.classList.remove("active");
+      });
+
+      // 歌单列表
       const songListContainer = document.getElementById("songList");
       songsData.forEach((song, index) => {
-        const songItem = document.createElement("li");
-        songItem.textContent = song.title;
-        songItem.addEventListener("click", () => {
+        const li = document.createElement("li");
+        li.textContent = song.title;
+        li.addEventListener("click", () => {
           currentSongIndex = index;
           updateSongDetails();
           audioPlayer.play();
           playPauseIcon.className = "fas fa-pause";
           albumCover.classList.add("rotate");
+          songListPopup.classList.remove("active");
         });
-        songListContainer.appendChild(songItem);
+        songListContainer.appendChild(li);
       });
 
       updateSongDetails();
       updateModeHighlight();
     });
 </script>
-</body>
-</html>
-
