@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Quiet Praise</title>
 
-  <!-- 引入 Font Awesome 图标库 -->
+  <!-- Font Awesome 图标库 -->
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
@@ -46,8 +46,9 @@
     .controls {
       display: flex;
       justify-content: center;
+      flex-wrap: wrap;
       gap: 10px;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
     }
 
     .control-button {
@@ -63,6 +64,22 @@
 
     .control-button:hover {
       background-color: #666;
+    }
+
+    .progress-container {
+      margin-top: 10px;
+    }
+
+    .progress-times {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: #bbb;
+    }
+
+    #progressBar {
+      width: 100%;
+      margin-top: 5px;
     }
 
     .lyrics {
@@ -101,17 +118,17 @@
 </head>
 <body>
   <div class="container">
-    <!-- 专辑封面 -->
+    <!-- 封面 -->
     <img
       src="https://lqxw-audio.oss-cn-beijing.aliyuncs.com/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20250409111134.jpg"
       alt="Album Cover"
       class="album-cover"
     />
 
-    <!-- 歌名标题 -->
+    <!-- 歌名 -->
     <div class="song-title" id="songTitle">你坐着为王</div>
 
-    <!-- 播放控制按钮 -->
+    <!-- 六个按钮一排 -->
     <div class="controls">
       <button class="control-button" id="prevSong" title="上一首">
         <i class="fas fa-backward"></i>
@@ -122,10 +139,6 @@
       <button class="control-button" id="nextSong" title="下一首">
         <i class="fas fa-forward"></i>
       </button>
-    </div>
-
-    <!-- 播放模式按钮 -->
-    <div class="controls">
       <button class="control-button" id="loopMode" title="单曲循环">
         <i class="fas fa-repeat"></i><sup style="font-size: 10px;">1</sup>
       </button>
@@ -137,7 +150,16 @@
       </button>
     </div>
 
-    <!-- 歌词展示 -->
+    <!-- 播放进度条 -->
+    <div class="progress-container">
+      <div class="progress-times">
+        <span id="currentTime">00:00</span>
+        <span id="totalTime">00:00</span>
+      </div>
+      <input type="range" id="progressBar" value="0" step="1" min="0" max="100" />
+    </div>
+
+    <!-- 歌词 -->
     <div class="lyrics" id="lyricsDisplay">歌词内容...</div>
 
     <!-- 歌曲列表 -->
@@ -154,6 +176,20 @@
         let playMode = "sequence";
         const audioPlayer = new Audio(songsData[currentSongIndex].src);
 
+        const progressBar = document.getElementById("progressBar");
+        const currentTimeDisplay = document.getElementById("currentTime");
+        const totalTimeDisplay = document.getElementById("totalTime");
+
+        function formatTime(seconds) {
+          const m = Math.floor(seconds / 60)
+            .toString()
+            .padStart(2, "0");
+          const s = Math.floor(seconds % 60)
+            .toString()
+            .padStart(2, "0");
+          return `${m}:${s}`;
+        }
+
         function updateSongDetails() {
           document.getElementById("songTitle").textContent =
             songsData[currentSongIndex].title;
@@ -162,22 +198,22 @@
           audioPlayer.src = songsData[currentSongIndex].src;
         }
 
-        document
-          .getElementById("playPause")
-          .addEventListener("click", function () {
-            const icon = this.querySelector("i");
-            if (audioPlayer.paused || audioPlayer.ended) {
-              audioPlayer.play().then(() => {
-                icon.classList.remove("fa-play");
-                icon.classList.add("fa-pause");
-              });
-            } else {
-              audioPlayer.pause();
-              icon.classList.remove("fa-pause");
-              icon.classList.add("fa-play");
-            }
-          });
+        // 播放暂停
+        document.getElementById("playPause").addEventListener("click", function () {
+          const icon = this.querySelector("i");
+          if (audioPlayer.paused || audioPlayer.ended) {
+            audioPlayer.play().then(() => {
+              icon.classList.remove("fa-play");
+              icon.classList.add("fa-pause");
+            });
+          } else {
+            audioPlayer.pause();
+            icon.classList.remove("fa-pause");
+            icon.classList.add("fa-play");
+          }
+        });
 
+        // 上一首
         document.getElementById("prevSong").addEventListener("click", () => {
           if (playMode === "sequence") {
             currentSongIndex =
@@ -190,6 +226,7 @@
           document.querySelector("#playPause i").className = "fas fa-pause";
         });
 
+        // 下一首
         document.getElementById("nextSong").addEventListener("click", () => {
           if (playMode === "sequence") {
             currentSongIndex = (currentSongIndex + 1) % songsData.length;
@@ -201,19 +238,18 @@
           document.querySelector("#playPause i").className = "fas fa-pause";
         });
 
+        // 模式切换
         document.getElementById("loopMode").addEventListener("click", () => {
           playMode = "loop";
           audioPlayer.loop = true;
           alert("已开启单曲循环");
         });
 
-        document
-          .getElementById("sequenceMode")
-          .addEventListener("click", () => {
-            playMode = "sequence";
-            audioPlayer.loop = false;
-            alert("已开启顺序播放");
-          });
+        document.getElementById("sequenceMode").addEventListener("click", () => {
+          playMode = "sequence";
+          audioPlayer.loop = false;
+          alert("已开启顺序播放");
+        });
 
         document.getElementById("shuffleMode").addEventListener("click", () => {
           playMode = "shuffle";
@@ -221,6 +257,22 @@
           alert("已开启随机播放");
         });
 
+        // 更新进度条和时间
+        audioPlayer.addEventListener("timeupdate", () => {
+          const current = audioPlayer.currentTime;
+          const total = audioPlayer.duration || 0;
+          progressBar.value = (current / total) * 100 || 0;
+          currentTimeDisplay.textContent = formatTime(current);
+          totalTimeDisplay.textContent = formatTime(total);
+        });
+
+        // 拖动进度条
+        progressBar.addEventListener("input", () => {
+          const total = audioPlayer.duration;
+          audioPlayer.currentTime = (progressBar.value / 100) * total;
+        });
+
+        // 初始化歌曲列表
         const songListContainer = document.getElementById("songList");
         songsData.forEach((song, index) => {
           const songItem = document.createElement("li");
