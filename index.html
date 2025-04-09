@@ -4,11 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Quiet Praise</title>
+
   <!-- 引入 Font Awesome 图标库 -->
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
   />
+
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -99,42 +101,46 @@
 </head>
 <body>
   <div class="container">
+    <!-- 专辑封面 -->
     <img
       src="https://lqxw-audio.oss-cn-beijing.aliyuncs.com/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20250409111134.jpg"
       alt="Album Cover"
       class="album-cover"
     />
 
+    <!-- 歌名标题 -->
     <div class="song-title" id="songTitle">你坐着为王</div>
 
     <!-- 播放控制按钮 -->
     <div class="controls">
-      <button class="control-button" id="prevSong">
+      <button class="control-button" id="prevSong" title="上一首">
         <i class="fas fa-backward"></i>
       </button>
-      <button class="control-button" id="playPause">
+      <button class="control-button" id="playPause" title="播放 / 暂停">
         <i class="fas fa-play"></i>
       </button>
-      <button class="control-button" id="nextSong">
+      <button class="control-button" id="nextSong" title="下一首">
         <i class="fas fa-forward"></i>
       </button>
     </div>
 
     <!-- 播放模式按钮 -->
     <div class="controls">
-      <button class="control-button" id="loopMode">
-        <i class="fas fa-repeat"></i>
+      <button class="control-button" id="loopMode" title="单曲循环">
+        <i class="fas fa-repeat"></i><sup style="font-size: 10px;">1</sup>
       </button>
-      <button class="control-button" id="sequenceMode">
-        <i class="fas fa-list-ol"></i>
+      <button class="control-button" id="sequenceMode" title="顺序播放">
+        <i class="fas fa-bars"></i>
       </button>
-      <button class="control-button" id="shuffleMode">
+      <button class="control-button" id="shuffleMode" title="随机播放">
         <i class="fas fa-random"></i>
       </button>
     </div>
 
+    <!-- 歌词展示 -->
     <div class="lyrics" id="lyricsDisplay">歌词内容...</div>
 
+    <!-- 歌曲列表 -->
     <div class="song-list">
       <ul id="songList"></ul>
     </div>
