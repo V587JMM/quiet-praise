@@ -15,13 +15,13 @@
       background-color: #1e1e1e;
       color: white;
       font-family: Arial, sans-serif;
+      text-align: center;
     }
 
     .container {
       max-width: 600px;
       margin: 0 auto;
       padding: 20px;
-      text-align: center;
     }
 
     .album-cover {
@@ -46,13 +46,14 @@
     }
 
     .song-title {
-      font-size: 22px;
+      font-size: 24px;
       margin: 10px 0;
+      color: #fff;
     }
 
     .controls {
       display: flex;
-      justify-content: space-around;
+      justify-content: center;
       margin: 20px 0;
       flex-wrap: wrap;
     }
@@ -72,7 +73,7 @@
     }
 
     .progress-container {
-      margin-top: 5px;
+      margin-top: 10px;
     }
 
     .progress-times {
@@ -112,34 +113,26 @@
 
     .lyrics-container {
       position: fixed;
-      top: 100%;
+      top: 0;
       left: 0;
       width: 100%;
-      height: 50%;
+      height: 100%;
       background-color: #1e1e1e;
       z-index: 10;
       display: flex;
       flex-direction: column;
-      transition: top 0.4s ease;
-      padding: 20px;
-      text-align: left;
-      font-size: 16px;
-      color: #ccc;
+      align-items: center;
+      justify-content: center;
       overflow-y: auto;
+      transition: top 0.3s ease;
+      padding: 20px;
+      color: #fff;
+      font-size: 16px;
+      display: none; /* Hide initially */
     }
 
     .lyrics-container.active {
-      top: 50%;
-    }
-
-    .lyrics-header {
-      text-align: left;
-      font-weight: bold;
-      font-size: 18px;
-    }
-
-    .lyrics {
-      padding-top: 10px;
+      display: flex;
     }
 
     .songlist-toggle {
@@ -214,6 +207,7 @@
 <body>
   <div class="container">
     <img id="albumCover" class="album-cover" src="https://lqxw-audio.oss-cn-beijing.aliyuncs.com/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20250409111134.jpg" />
+
     <div class="song-title" id="songTitle">加载中...</div>
 
     <div class="controls">
@@ -233,17 +227,15 @@
       <input type="range" id="progressBar" value="0" />
     </div>
 
-    <!-- 歌词显示区域 -->
-    <div class="lyrics-container" id="lyricsPanel">
-      <div class="lyrics-header">
-        <button id="closeLyrics" class="control-button"><i class="fas fa-chevron-down"></i></button>
-      </div>
-      <div class="lyrics" id="lyricsDisplay">歌词加载中...</div>
-    </div>
-
-    <!-- 歌单按钮 -->
+    <!-- 歌词按钮 -->
     <div class="songlist-toggle">
       <button id="openSongList"><i class="fas fa-music"></i></button>
+    </div>
+
+    <!-- 歌词内容 -->
+    <div class="lyrics-container" id="lyricsPanel">
+      <button id="closeLyrics" class="control-button"><i class="fas fa-chevron-down"></i></button>
+      <div id="lyricsDisplay">歌词加载中...</div>
     </div>
 
     <!-- 歌单弹出层 -->
@@ -261,7 +253,6 @@
       .then((res) => res.json())
       .then((songsData) => {
         let currentSongIndex = 0;
-        let playMode = "sequence";
         const audioPlayer = new Audio(songsData[currentSongIndex].src);
 
         const playPauseBtn = document.getElementById("playPause");
@@ -271,6 +262,7 @@
         const currentTimeDisplay = document.getElementById("currentTime");
         const totalTimeDisplay = document.getElementById("totalTime");
         const lyricsPanel = document.getElementById("lyricsPanel");
+        const lyricsDisplay = document.getElementById("lyricsDisplay");
         const songListPopup = document.getElementById("songListPopup");
 
         const modeButtons = {
@@ -288,8 +280,8 @@
         function updateSongDetails() {
           document.getElementById("songTitle").textContent =
             songsData[currentSongIndex].title;
-          document.getElementById("lyricsDisplay").textContent =
-            songsData[currentSongIndex].lyrics;
+          document.getElementById("lyricsDisplay").innerHTML =
+            songsData[currentSongIndex].lyrics.replace(/\n/g, "<br>");
           audioPlayer.src = songsData[currentSongIndex].src;
         }
 
