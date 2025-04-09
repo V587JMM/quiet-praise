@@ -110,36 +110,36 @@
       margin-top: -4px;
     }
 
-    .lyrics-slide {
+    .lyrics-container {
       position: fixed;
       top: 100%;
       left: 0;
       width: 100%;
-      height: 100%;
+      height: 50%;
       background-color: #1e1e1e;
       z-index: 10;
       display: flex;
       flex-direction: column;
       transition: top 0.4s ease;
+      padding: 20px;
+      text-align: left;
+      font-size: 16px;
+      color: #ccc;
+      overflow-y: auto;
     }
 
-    .lyrics-slide.active {
-      top: 0;
+    .lyrics-container.active {
+      top: 50%;
     }
 
     .lyrics-header {
-      padding: 10px;
       text-align: left;
+      font-weight: bold;
+      font-size: 18px;
     }
 
     .lyrics {
-      padding: 20px;
-      font-size: 14px;
-      color: #ccc;
-      text-align: left;
-      overflow-y: auto;
-      white-space: pre-wrap;
-      word-wrap: break-word;
+      padding-top: 10px;
     }
 
     .songlist-toggle {
@@ -214,7 +214,6 @@
 <body>
   <div class="container">
     <img id="albumCover" class="album-cover" src="https://lqxw-audio.oss-cn-beijing.aliyuncs.com/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20250409111134.jpg" />
-
     <div class="song-title" id="songTitle">加载中...</div>
 
     <div class="controls">
@@ -234,8 +233,8 @@
       <input type="range" id="progressBar" value="0" />
     </div>
 
-    <!-- 歌词滑出层 -->
-    <div class="lyrics-slide" id="lyricsPanel">
+    <!-- 歌词显示区域 -->
+    <div class="lyrics-container" id="lyricsPanel">
       <div class="lyrics-header">
         <button id="closeLyrics" class="control-button"><i class="fas fa-chevron-down"></i></button>
       </div>
