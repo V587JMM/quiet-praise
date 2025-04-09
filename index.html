@@ -248,166 +248,109 @@
   </div>
 
   <script>
-    fetch("https://lqxw-audio.oss-cn-beijing.aliyuncs.com/quiet-praise-data.json")
-      .then((res) => res.json())
-      .then((songsData) => {
-        let currentSongIndex = 0;
-        const audioPlayer = new Audio(songsData[currentSongIndex].src);
+  fetch("https://lqxw-audio.oss-cn-beijing.aliyuncs.com/quiet-praise-data.json")
+    .then((res) => res.json())
+    .then((songsData) => {
+      let currentSongIndex = 0;
+      let playMode = "sequence"; // 默认顺序播放
+      const audioPlayer = new Audio(songsData[currentSongIndex].src);
 
-        const playPauseBtn = document.getElementById("playPause");
-        const playPauseIcon = playPauseBtn.querySelector("i");
-        const progressBar = document.getElementById("progressBar");
-        const albumCover = document.getElementById("albumCover");
-        const currentTimeDisplay = document.getElementById("currentTime");
-        const totalTimeDisplay = document.getElementById("totalTime");
-        const lyricsPanel = document.getElementById("lyricsPanel");
-        const lyricsDisplay = document.getElementById("lyricsDisplay");
-        const songListPopup = document.getElementById("songListPopup");
+      const playPauseBtn = document.getElementById("playPause");
+      const playPauseIcon = playPauseBtn.querySelector("i");
+      const progressBar = document.getElementById("progressBar");
+      const albumCover = document.getElementById("albumCover");
+      const currentTimeDisplay = document.getElementById("currentTime");
+      const totalTimeDisplay = document.getElementById("totalTime");
+      const lyricsDisplay = document.getElementById("lyricsDisplay");
+      const songTitle = document.getElementById("songTitle");
 
-        const modeButtons = {
-          loop: document.getElementById("loopMode"),
-          sequence: document.getElementById("sequenceMode"),
-          shuffle: document.getElementById("shuffleMode"),
-        };
+      const modeButtons = {
+        loop: document.getElementById("loopMode"),
+        sequence: document.getElementById("sequenceMode"),
+        shuffle: document.getElementById("shuffleMode"),
+      };
 
-        function formatTime(seconds) {
-          const m = Math.floor(seconds / 60).toString().padStart(2, "0");
-          const s = Math.floor(seconds % 60).toString().padStart(2, "0");
-          return `${m}:${s}`;
+      function formatTime(seconds) {
+        const m = Math.floor(seconds / 60).toString().padStart(2, "0");
+        const s = Math.floor(seconds % 60).toString().padStart(2, "0");
+        return `${m}:${s}`;
+      }
+
+      function updateSongDetails() {
+        audioPlayer.src = songsData[currentSongIndex].src;
+        songTitle.textContent = songsData[currentSongIndex].title;
+        lyricsDisplay.textContent = songsData[currentSongIndex].lyrics;
+      }
+
+      function updateModeHighlight() {
+        Object.values(modeButtons).forEach((btn) => btn.classList.remove("active"));
+        if (modeButtons[playMode]) {
+          modeButtons[playMode].classList.add("active");
         }
+      }
 
-        function updateSongDetails() {
-          document.getElementById("songTitle").textContent =
-            songsData[currentSongIndex].title;
-          document.getElementById("lyricsDisplay").innerHTML =
-            songsData[currentSongIndex].lyrics.replace(/\n/g, "<br>");
-          audioPlayer.src = songsData[currentSongIndex].src;
-        }
-
-        function updateModeHighlight() {
-          Object.keys(modeButtons).forEach((key) => {
-            modeButtons[key].classList.remove("active");
-          });
-          if (modeButtons[playMode]) {
-            modeButtons[playMode].classList.add("active");
-          }
-        }
-
-        playPauseBtn.addEventListener("click", () => {
-          if (audioPlayer.paused || audioPlayer.ended) {
-            audioPlayer.play().then(() => {
-              playPauseIcon.className = "fas fa-pause";
-              albumCover.classList.add("rotate");
-            });
-          } else {
-            audioPlayer.pause();
-            playPauseIcon.className = "fas fa-play";
-            albumCover.classList.remove("rotate");
-          }
-        });
-
-        document.getElementById("prevSong").addEventListener("click", () => {
-          currentSongIndex =
-            playMode === "shuffle"
-              ? Math.floor(Math.random() * songsData.length)
-              : (currentSongIndex - 1 + songsData.length) % songsData.length;
-          updateSongDetails();
+      // 播放暂停
+      playPauseBtn.addEventListener("click", () => {
+        if (audioPlayer.paused) {
           audioPlayer.play();
           playPauseIcon.className = "fas fa-pause";
-        });
+          albumCover.classList.add("rotate");
+        } else {
+          audioPlayer.pause();
+          playPauseIcon.className = "fas fa-play";
+          albumCover.classList.remove("rotate");
+        }
+      });
 
-        document.getElementById("nextSong").addEventListener("click", () => {
-          currentSongIndex =
-            playMode === "shuffle"
-              ? Math.floor(Math.random() * songsData.length)
-              : (currentSongIndex + 1) % songsData.length;
-          updateSongDetails();
+      // 进度条更新
+      audioPlayer.addEventListener("timeupdate", () => {
+        const current = audioPlayer.currentTime;
+        const total = audioPlayer.duration || 0;
+        const percent = (current / total) * 100 || 0;
+        progressBar.value = percent;
+        progressBar.style.setProperty("--progress", `${percent}%`);
+        currentTimeDisplay.textContent = formatTime(current);
+        totalTimeDisplay.textContent = formatTime(total);
+      });
+
+      progressBar.addEventListener("input", () => {
+        const total = audioPlayer.duration;
+        audioPlayer.currentTime = (progressBar.value / 100) * total;
+      });
+
+      // 自动播放下一首
+      audioPlayer.addEventListener("ended", () => {
+        if (playMode === "loop") {
           audioPlayer.play();
-          playPauseIcon.className = "fas fa-pause";
-        });
-
-        document.getElementById("loopMode").addEventListener("click", () => {
-          playMode = "loop";
-          audioPlayer.loop = true;
-          updateModeHighlight();
-        });
-
-        document.getElementById("sequenceMode").addEventListener("click", () => {
-          playMode = "sequence";
-          audioPlayer.loop = false;
-          updateModeHighlight();
-        });
-
-        document.getElementById("shuffleMode").addEventListener("click", () => {
-          playMode = "shuffle";
-          audioPlayer.loop = false;
-          updateModeHighlight();
-        });
-
-        audioPlayer.addEventListener("timeupdate", () => {
-          const current = audioPlayer.currentTime;
-          const total = audioPlayer.duration || 0;
-          const percent = (current / total) * 100 || 0;
-          progressBar.value = percent;
-          progressBar.style.setProperty("--progress", `${percent}%`);
-          currentTimeDisplay.textContent = formatTime(current);
-          totalTimeDisplay.textContent = formatTime(total);
-        });
-
-        audioPlayer.addEventListener("ended", () => {
-  if (playMode === "loop") {
-    audioPlayer.play();
-  } else if (playMode === "shuffle") {
-    currentSongIndex = Math.floor(Math.random() * songsData.length);
-    updateSongDetails();
-    audioPlayer.play();
-  } else {
-    currentSongIndex = (currentSongIndex + 1) % songsData.length;
-    updateSongDetails();
-    audioPlayer.play();
-  }
-});
-
-        progressBar.addEventListener("input", () => {
-          const total = audioPlayer.duration;
-          audioPlayer.currentTime = (progressBar.value / 100) * total;
-        });
-
-        // 展开/关闭歌词
-        albumCover.addEventListener("click", () => {
-          lyricsPanel.classList.add("active");
-        });
-        document.getElementById("closeLyrics").addEventListener("click", () => {
-          lyricsPanel.classList.remove("active");
-        });
-
-        // 展开/关闭歌单
-        document.getElementById("openSongList").addEventListener("click", () => {
-          songListPopup.classList.add("active");
-        });
-        document.getElementById("closeSongList").addEventListener("click", () => {
-          songListPopup.classList.remove("active");
-        });
-
-        // 歌单点击切歌
-        const songListContainer = document.getElementById("songList");
-        songsData.forEach((song, index) => {
-          const li = document.createElement("li");
-          li.textContent = song.title;
-          li.addEventListener("click", () => {
-            currentSongIndex = index;
-            updateSongDetails();
-            audioPlayer.play();
-            playPauseIcon.className = "fas fa-pause";
-            albumCover.classList.add("rotate");
-            songListPopup.classList.remove("active");
-          });
-          songListContainer.appendChild(li);
-        });
-
+        } else if (playMode === "shuffle") {
+          currentSongIndex = Math.floor(Math.random() * songsData.length);
+        } else {
+          currentSongIndex = (currentSongIndex + 1) % songsData.length;
+        }
         updateSongDetails();
+        audioPlayer.play();
+        playPauseIcon.className = "fas fa-pause";
+      });
+
+      // 播放模式切换
+      document.getElementById("loopMode").addEventListener("click", () => {
+        playMode = "loop";
         updateModeHighlight();
       });
-  </script>
+
+      document.getElementById("sequenceMode").addEventListener("click", () => {
+        playMode = "sequence";
+        updateModeHighlight();
+      });
+
+      document.getElementById("shuffleMode").addEventListener("click", () => {
+        playMode = "shuffle";
+        updateModeHighlight();
+      });
+
+      updateSongDetails();
+      updateModeHighlight();
+    });
+</script>
 </body>
 </html>
