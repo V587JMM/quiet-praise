@@ -113,10 +113,10 @@
     /* 歌词页面 */
     .lyrics-slide {
       position: fixed;
-      top: 0;
+      top: 100%;
       left: 0;
       width: 100%;
-      height: 80%;
+      height: 50%;
       background-color: #1e1e1e;
       z-index: 10;
       display: flex;
@@ -125,7 +125,7 @@
     }
 
     .lyrics-slide.active {
-      top: 0;
+      top: 50%;
     }
 
     .lyrics-header {
@@ -291,7 +291,7 @@
         function updateSongDetails() {
           document.getElementById("songTitle").textContent =
             songsData[currentSongIndex].title;
-          document.getElementById("lyricsDisplay").textContent =
+          document.getElementById("lyricsDisplay").innerHTML =
             songsData[currentSongIndex].lyrics;
           audioPlayer.src = songsData[currentSongIndex].src;
         }
