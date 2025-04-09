@@ -15,7 +15,6 @@
       background-color: #1e1e1e;
       color: white;
       font-family: Arial, sans-serif;
-      overflow-x: hidden;
     }
 
     .container {
@@ -26,7 +25,7 @@
       position: relative;
     }
 
-    .album-cover {
+   .album-cover {
       width: 70vw;
       max-width: 280px;
       aspect-ratio: 1 / 1;
@@ -57,11 +56,6 @@
       justify-content: space-around;
       margin: 20px 0;
       flex-wrap: wrap;
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 20;
     }
 
     .control-button {
@@ -72,6 +66,10 @@
       padding: 12px;
       color: white;
       cursor: pointer;
+    }
+
+    .control-button.active {
+      background-color: #666;
     }
 
     .progress-container {
@@ -113,9 +111,10 @@
       margin-top: -4px;
     }
 
-    .lyrics-slide {
+    .lyrics-container {
+      display: none;
       position: fixed;
-      top: 100%;
+      top: 0;
       left: 0;
       width: 100%;
       height: 100%;
@@ -123,29 +122,28 @@
       z-index: 10;
       display: flex;
       flex-direction: column;
-      transition: top 0.4s ease;
       padding: 20px;
-      color: #ccc;
-      font-size: 14px;
       overflow-y: auto;
-      padding-bottom: 100px; /* 保证歌词不与底部按钮重叠 */
-    }
-
-    .lyrics-slide.active {
-      top: 0;
     }
 
     .lyrics-header {
       padding: 10px;
       text-align: left;
       font-size: 18px;
-      font-weight: bold;
       color: #fff;
+    }
+
+    .lyrics-content {
+      padding: 20px;
+      font-size: 14px;
+      color: #ccc;
+      text-align: left;
+      overflow-y: auto;
     }
 
     .songlist-toggle {
       position: fixed;
-      bottom: 90px;
+      bottom: 20px;
       right: 20px;
       z-index: 10;
     }
@@ -210,13 +208,14 @@
       color: #fff;
       font-weight: bold;
     }
-
   </style>
 </head>
 <body>
   <div class="container">
     <img id="albumCover" class="album-cover" src="https://lqxw-audio.oss-cn-beijing.aliyuncs.com/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20250409111134.jpg" />
+
     <div class="song-title" id="songTitle">加载中...</div>
+
     <div class="controls">
       <button class="control-button" id="prevSong"><i class="fas fa-backward"></i></button>
       <button class="control-button" id="playPause"><i class="fas fa-play"></i></button>
@@ -234,12 +233,13 @@
       <input type="range" id="progressBar" value="0" />
     </div>
 
-    <!-- 歌词滑出层 -->
-    <div class="lyrics-slide" id="lyricsPanel">
+    <!-- 歌词直接显示 -->
+    <div class="lyrics-container" id="lyricsPanel">
       <div class="lyrics-header">
         <button id="closeLyrics" class="control-button"><i class="fas fa-chevron-down"></i></button>
+        歌词
       </div>
-      <div class="lyrics" id="lyricsDisplay">歌词加载中...</div>
+      <div class="lyrics-content" id="lyricsDisplay">歌词加载中...</div>
     </div>
 
     <!-- 歌单按钮 -->
@@ -290,7 +290,7 @@
           document.getElementById("songTitle").textContent =
             songsData[currentSongIndex].title;
           document.getElementById("lyricsDisplay").innerHTML =
-            songsData[currentSongIndex].lyrics.replace(/\n/g, "<br>"); // 替换换行符
+            songsData[currentSongIndex].lyrics.replace(/\n/g, "<br>");
           audioPlayer.src = songsData[currentSongIndex].src;
         }
 
@@ -371,10 +371,10 @@
 
         // 展开/关闭歌词
         albumCover.addEventListener("click", () => {
-          lyricsPanel.classList.add("active");
+          lyricsPanel.style.display = "flex";
         });
         document.getElementById("closeLyrics").addEventListener("click", () => {
-          lyricsPanel.classList.remove("active");
+          lyricsPanel.style.display = "none";
         });
 
         // 展开/关闭歌单
