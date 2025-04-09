@@ -96,21 +96,6 @@
       <summary>📖 展开/隐藏歌单</summary>
       <ul id="playlist"></ul>
     </details>
-
-    <!-- 留言区开始 -->
-    <div style="margin-top: 4rem">
-      <h2 style="margin-bottom: 1rem; font-size: 1.5rem; color: #fff;">💬 留言回应</h2>
-      <div id="cusdis_thread"
-        data-host="https://cusdis.com"
-        data-app-id="f3ece84f-ffdf-4b14-9584-c61ca9f6c672"
-        data-page-id="quiet-praise-feedback"
-        data-page-url="https://v587jmm.github.io/quiet-praise/"
-        data-page-title="Quiet Praise 留言区">
-        data-no-email="true"> <!-- 禁用 Email -->
-      </div>
-      <script async defer src="https://cusdis.com/js/cusdis.es.js"></script>
-    </div>
-    <!-- 留言区结束 -->
   </div>
 
   <script>
@@ -134,8 +119,7 @@
       playlist.innerHTML = "";
       songs.forEach((song, index) => {
         const li = document.createElement("li");
-        li.textContent = `${index + 1}. ${song.title}`;
-        li.style.textAlign = "left";
+        li.textContent = song.title;
         li.onclick = () => {
           current = index;
           loadSong(current);
@@ -181,14 +165,6 @@
         li.style.fontWeight = i === index ? "bold" : "normal";
       });
     }
-
-    window.addEventListener('load', function () {
-      // 设置Cusdis为中文，去掉Email
-      window.Cusdis = window.Cusdis || {};
-      window.Cusdis.lang = 'zh-CN';  // 设置为中文
-      window.Cusdis.title = 'Quiet Praise 留言区'; // 自定义标题
-      window.Cusdis.no_email = true;  // 去除Email选项
-    });
 
     fetchSongs();
   </script>
