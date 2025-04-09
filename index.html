@@ -55,37 +55,22 @@
     .controls button:hover {
       background-color: rgba(255, 255, 255, 1);
     }
-    .playlist-container {
-      display: flex;
-      flex-direction: row;
-      width: 100%;
-      justify-content: space-between;
-      max-width: 800px;
-      margin: 2rem 0;
-    }
-    .playlist {
-      width: 40%;
-      text-align: left;
-      padding-right: 1rem;
-      max-height: 400px;
-      overflow-y: auto;
-    }
-    .lyrics {
-      width: 55%;
-      background: rgba(255, 255, 255, 0.2);
-      padding: 1rem;
+    /* 歌单弹出设计 */
+    details {
+      margin-top: 1rem;
+      background-color: rgba(255, 255, 255, 0.2);
       border-radius: 10px;
-      max-height: 400px;
-      overflow-y: auto;
-      font-size: 1rem;
-      white-space: pre-wrap;
-      color: white;
+      width: 90%;
+      max-width: 500px;
+      padding: 1rem;
+      text-align: left;
     }
-    details summary {
+    summary {
       cursor: pointer;
-      font-size: 1.1rem;
+      font-size: 1.2rem;
       font-weight: bold;
-      margin: 1rem;
+      padding: 1rem;
+      margin: 0;
     }
     ul {
       list-style: none;
@@ -95,6 +80,19 @@
       margin: 0.5rem 0;
       cursor: pointer;
       text-decoration: underline;
+    }
+    .lyrics {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 1rem;
+      margin: 2rem auto;
+      width: 90%;
+      max-width: 500px;
+      border-radius: 10px;
+      overflow-y: auto;
+      max-height: 300px;
+      font-size: 1rem;
+      white-space: pre-wrap;
+      color: white;
     }
   </style>
 </head>
@@ -111,15 +109,13 @@
       <button onclick="toggleRepeat()">单曲循环</button>
     </div>
 
-    <!-- 歌单和歌词并排显示 -->
-    <div class="playlist-container">
-      <div class="playlist" id="playlist">
-        <!-- 歌单内容 -->
-      </div>
-      <div class="lyrics" id="lyrics">
-        <!-- 歌词内容 -->
-      </div>
-    </div>
+    <div class="lyrics" id="lyrics"></div>
+
+    <!-- 歌单折叠显示 -->
+    <details>
+      <summary>📖 展开/隐藏歌单</summary>
+      <ul id="playlist"></ul>
+    </details>
   </div>
 
   <script>
