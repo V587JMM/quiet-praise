@@ -20,6 +20,9 @@
       max-width: 800px;
       margin: auto;
       border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
     h1 {
       font-size: 2.5rem;
@@ -34,19 +37,6 @@
       max-width: 500px;
       margin: 1rem auto;
       display: block;
-    }
-    .lyrics {
-      background: rgba(255, 255, 255, 0.2);
-      padding: 1rem;
-      margin: 2rem auto;
-      width: 90%;
-      max-width: 500px;
-      border-radius: 10px;
-      overflow-y: auto;
-      max-height: 300px;
-      font-size: 1rem;
-      white-space: pre-wrap;
-      color: white;
     }
     .controls {
       margin-top: 1rem;
@@ -65,8 +55,31 @@
     .controls button:hover {
       background-color: rgba(255, 255, 255, 1);
     }
-    .song-list {
-      margin-top: 1rem;
+    .playlist-container {
+      display: flex;
+      flex-direction: row;
+      width: 100%;
+      justify-content: space-between;
+      max-width: 800px;
+      margin: 2rem 0;
+    }
+    .playlist {
+      width: 40%;
+      text-align: left;
+      padding-right: 1rem;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    .lyrics {
+      width: 55%;
+      background: rgba(255, 255, 255, 0.2);
+      padding: 1rem;
+      border-radius: 10px;
+      max-height: 400px;
+      overflow-y: auto;
+      font-size: 1rem;
+      white-space: pre-wrap;
+      color: white;
     }
     details summary {
       cursor: pointer;
@@ -83,18 +96,6 @@
       cursor: pointer;
       text-decoration: underline;
     }
-    .progress-bar-container {
-      margin-top: 1rem;
-      max-width: 500px;
-      width: 90%;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    .progress-bar {
-      width: 100%;
-      max-width: 500px;
-      margin: 1rem auto;
-    }
   </style>
 </head>
 <body>
@@ -110,18 +111,15 @@
       <button onclick="toggleRepeat()">单曲循环</button>
     </div>
 
-    <div class="lyrics" id="lyrics"></div>
-
-    <!-- 播放进度条 -->
-    <div class="progress-bar-container">
-      <input type="range" id="progressBar" class="progress-bar" value="0" max="100" step="1" onchange="setProgress(this.value)" />
+    <!-- 歌单和歌词并排显示 -->
+    <div class="playlist-container">
+      <div class="playlist" id="playlist">
+        <!-- 歌单内容 -->
+      </div>
+      <div class="lyrics" id="lyrics">
+        <!-- 歌词内容 -->
+      </div>
     </div>
-
-    <!-- 歌单显示 -->
-    <details class="song-list">
-      <summary>📖 展开/隐藏歌单</summary>
-      <ul id="playlist"></ul>
-    </details>
   </div>
 
   <script>
@@ -193,15 +191,6 @@
     function toggleRepeat() {
       isLooping = !isLooping;
     }
-
-    function setProgress(value) {
-      audio.currentTime = (value / 100) * audio.duration;
-    }
-
-    audio.addEventListener("timeupdate", function () {
-      const progress = (audio.currentTime / audio.duration) * 100;
-      document.getElementById("progressBar").value = progress;
-    });
 
     function highlightPlaylist(index) {
       const items = document.querySelectorAll("#playlist li");
