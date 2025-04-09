@@ -1,215 +1,235 @@
 <!DOCTYPE html>
 <html lang="zh-Hans">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiet Praise</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #1e1e1e;
-            color: white;
-            text-align: center;
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            max-width: 800px;
-            margin: 50px auto;
-            padding: 20px;
-            background-color: #333;
-            border-radius: 10px;
-        }
-        .album-cover {
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin-bottom: 20px;
-            border: 5px solid #ffffff;
-        }
-        .song-title {
-            font-size: 24px;
-            margin: 10px 0;
-        }
-        .controls {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        .control-button {
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #444;
-            border: none;
-            border-radius: 5px;
-            color: white;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        .control-button:hover {
-            background-color: #666;
-        }
-        .lyrics {
-            margin-top: 20px;
-            font-size: 14px;
-            color: #ccc;
-            text-align: left;
-            padding: 10px;
-            border-radius: 5px;
-            background-color: #222;
-            height: 150px;
-            overflow-y: auto;
-        }
-        .song-list {
-            margin-top: 30px;
-            text-align: left;
-        }
-        .song-list ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        .song-list li {
-            margin: 5px 0;
-            cursor: pointer;
-            text-decoration: underline;
-            color: #00bcd4;
-        }
-        .song-list li:hover {
-            color: #fff;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiet Praise</title>
+  <!-- 引入 Font Awesome 图标库 -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #1e1e1e;
+      color: white;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+      background-color: #333;
+      border-radius: 10px;
+    }
+
+    .album-cover {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 20px;
+      border: 5px solid #ffffff;
+    }
+
+    .song-title {
+      font-size: 24px;
+      margin: 10px 0;
+    }
+
+    .controls {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .control-button {
+      padding: 10px 16px;
+      font-size: 20px;
+      background-color: #444;
+      border: none;
+      border-radius: 50%;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .control-button:hover {
+      background-color: #666;
+    }
+
+    .lyrics {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #ccc;
+      text-align: left;
+      padding: 10px;
+      border-radius: 5px;
+      background-color: #222;
+      height: 150px;
+      overflow-y: auto;
+    }
+
+    .song-list {
+      margin-top: 30px;
+      text-align: left;
+    }
+
+    .song-list ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    .song-list li {
+      margin: 5px 0;
+      cursor: pointer;
+      text-decoration: underline;
+      color: #00bcd4;
+    }
+
+    .song-list li:hover {
+      color: #fff;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Album Cover -->
-        <img src="https://lqxw-audio.oss-cn-beijing.aliyuncs.com/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20250409111134.jpg" alt="Album Cover" class="album-cover">
+  <div class="container">
+    <img
+      src="https://lqxw-audio.oss-cn-beijing.aliyuncs.com/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20250409111134.jpg"
+      alt="Album Cover"
+      class="album-cover"
+    />
 
-        <!-- Song Title -->
-        <div class="song-title" id="songTitle">你坐着为王</div>
+    <div class="song-title" id="songTitle">你坐着为王</div>
 
-        <!-- Controls -->
-        <div class="controls">
-            <button class="control-button" id="prevSong">上一首</button>
-            <button class="control-button" id="playPause">播放</button>
-            <button class="control-button" id="nextSong">下一首</button>
-        </div>
-
-        <!-- Play Mode Controls -->
-        <div class="controls">
-            <button class="control-button" id="loopMode">单曲循环</button>
-            <button class="control-button" id="sequenceMode">顺序播放</button>
-            <button class="control-button" id="shuffleMode">随机播放</button>
-        </div>
-
-        <!-- Lyrics Display -->
-        <div class="lyrics" id="lyricsDisplay">
-            歌词内容...
-        </div>
-
-        <!-- Song List -->
-        <div class="song-list">
-            <ul id="songList">
-                <!-- Song list will be dynamically generated -->
-            </ul>
-        </div>
+    <!-- 播放控制按钮 -->
+    <div class="controls">
+      <button class="control-button" id="prevSong">
+        <i class="fas fa-backward"></i>
+      </button>
+      <button class="control-button" id="playPause">
+        <i class="fas fa-play"></i>
+      </button>
+      <button class="control-button" id="nextSong">
+        <i class="fas fa-forward"></i>
+      </button>
     </div>
 
-    <script>
-        // Fetching the JSON file containing song data
-        fetch('https://lqxw-audio.oss-cn-beijing.aliyuncs.com/quiet-praise-data.json')
-            .then(response => response.json())
-            .then(songsData => {
-                let currentSongIndex = 0;
-                let playMode = 'sequence';  // Default to sequence play
-                const audioPlayer = new Audio(songsData[currentSongIndex].src); // Use src from JSON
+    <!-- 播放模式按钮 -->
+    <div class="controls">
+      <button class="control-button" id="loopMode">
+        <i class="fas fa-repeat"></i>
+      </button>
+      <button class="control-button" id="sequenceMode">
+        <i class="fas fa-list-ol"></i>
+      </button>
+      <button class="control-button" id="shuffleMode">
+        <i class="fas fa-random"></i>
+      </button>
+    </div>
 
-                // Function to update song details
-                function updateSongDetails() {
-                    document.getElementById('songTitle').textContent = songsData[currentSongIndex].title;
-                    document.getElementById('lyricsDisplay').textContent = songsData[currentSongIndex].lyrics;
-                    audioPlayer.src = songsData[currentSongIndex].src;
-                }
+    <div class="lyrics" id="lyricsDisplay">歌词内容...</div>
 
-                // Function to play or pause
-                document.getElementById('playPause').addEventListener('click', () => {
-                    if (audioPlayer.paused || audioPlayer.ended) {
-                        audioPlayer.play().then(() => {
-                            document.getElementById('playPause').textContent = "暂停";
-                        }).catch(error => {
-                            console.error("音频播放错误:", error);
-                            alert("播放音频时出错，请检查音频文件链接");
-                        });
-                    } else {
-                        audioPlayer.pause();
-                        document.getElementById('playPause').textContent = "播放";
-                    }
-                });
+    <div class="song-list">
+      <ul id="songList"></ul>
+    </div>
+  </div>
 
-                // Function to go to the previous song
-                document.getElementById('prevSong').addEventListener('click', () => {
-                    if (playMode === 'sequence') {
-                        currentSongIndex = (currentSongIndex - 1 + songsData.length) % songsData.length;
-                    } else if (playMode === 'shuffle') {
-                        currentSongIndex = Math.floor(Math.random() * songsData.length);
-                    }
-                    updateSongDetails();
-                    audioPlayer.play();
-                    document.getElementById('playPause').textContent = "暂停";
-                });
+  <script>
+    fetch("https://lqxw-audio.oss-cn-beijing.aliyuncs.com/quiet-praise-data.json")
+      .then((response) => response.json())
+      .then((songsData) => {
+        let currentSongIndex = 0;
+        let playMode = "sequence";
+        const audioPlayer = new Audio(songsData[currentSongIndex].src);
 
-                // Function to go to the next song
-                document.getElementById('nextSong').addEventListener('click', () => {
-                    if (playMode === 'sequence') {
-                        currentSongIndex = (currentSongIndex + 1) % songsData.length;
-                    } else if (playMode === 'shuffle') {
-                        currentSongIndex = Math.floor(Math.random() * songsData.length);
-                    }
-                    updateSongDetails();
-                    audioPlayer.play();
-                    document.getElementById('playPause').textContent = "暂停";
-                });
+        function updateSongDetails() {
+          document.getElementById("songTitle").textContent =
+            songsData[currentSongIndex].title;
+          document.getElementById("lyricsDisplay").textContent =
+            songsData[currentSongIndex].lyrics;
+          audioPlayer.src = songsData[currentSongIndex].src;
+        }
 
-                // Loop mode
-                document.getElementById('loopMode').addEventListener('click', () => {
-                    playMode = 'loop';
-                    audioPlayer.loop = true;
-                    alert('已开启单曲循环');
-                });
+        document
+          .getElementById("playPause")
+          .addEventListener("click", function () {
+            const icon = this.querySelector("i");
+            if (audioPlayer.paused || audioPlayer.ended) {
+              audioPlayer.play().then(() => {
+                icon.classList.remove("fa-play");
+                icon.classList.add("fa-pause");
+              });
+            } else {
+              audioPlayer.pause();
+              icon.classList.remove("fa-pause");
+              icon.classList.add("fa-play");
+            }
+          });
 
-                // Sequence mode (default)
-                document.getElementById('sequenceMode').addEventListener('click', () => {
-                    playMode = 'sequence';
-                    audioPlayer.loop = false;
-                    alert('已开启顺序播放');
-                });
+        document.getElementById("prevSong").addEventListener("click", () => {
+          if (playMode === "sequence") {
+            currentSongIndex =
+              (currentSongIndex - 1 + songsData.length) % songsData.length;
+          } else if (playMode === "shuffle") {
+            currentSongIndex = Math.floor(Math.random() * songsData.length);
+          }
+          updateSongDetails();
+          audioPlayer.play();
+          document.querySelector("#playPause i").className = "fas fa-pause";
+        });
 
-                // Shuffle mode
-                document.getElementById('shuffleMode').addEventListener('click', () => {
-                    playMode = 'shuffle';
-                    audioPlayer.loop = false;
-                    alert('已开启随机播放');
-                });
+        document.getElementById("nextSong").addEventListener("click", () => {
+          if (playMode === "sequence") {
+            currentSongIndex = (currentSongIndex + 1) % songsData.length;
+          } else if (playMode === "shuffle") {
+            currentSongIndex = Math.floor(Math.random() * songsData.length);
+          }
+          updateSongDetails();
+          audioPlayer.play();
+          document.querySelector("#playPause i").className = "fas fa-pause";
+        });
 
-                // Generate the song list
-                const songListContainer = document.getElementById('songList');
-                songsData.forEach((song, index) => {
-                    const songItem = document.createElement('li');
-                    songItem.textContent = song.title;
-                    songItem.addEventListener('click', () => {
-                        currentSongIndex = index;
-                        updateSongDetails();
-                        audioPlayer.play();
-                        document.getElementById('playPause').textContent = "暂停";
-                    });
-                    songListContainer.appendChild(songItem);
-                });
+        document.getElementById("loopMode").addEventListener("click", () => {
+          playMode = "loop";
+          audioPlayer.loop = true;
+          alert("已开启单曲循环");
+        });
 
-                // Initialize the first song
-                updateSongDetails();
-            })
-            .catch(error => console.error('Error fetching song data:', error));
-    </script>
+        document
+          .getElementById("sequenceMode")
+          .addEventListener("click", () => {
+            playMode = "sequence";
+            audioPlayer.loop = false;
+            alert("已开启顺序播放");
+          });
+
+        document.getElementById("shuffleMode").addEventListener("click", () => {
+          playMode = "shuffle";
+          audioPlayer.loop = false;
+          alert("已开启随机播放");
+        });
+
+        const songListContainer = document.getElementById("songList");
+        songsData.forEach((song, index) => {
+          const songItem = document.createElement("li");
+          songItem.textContent = song.title;
+          songItem.addEventListener("click", () => {
+            currentSongIndex = index;
+            updateSongDetails();
+            audioPlayer.play();
+            document.querySelector("#playPause i").className = "fas fa-pause";
+          });
+          songListContainer.appendChild(songItem);
+        });
+
+        updateSongDetails();
+      });
+  </script>
 </body>
 </html>
