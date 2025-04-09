@@ -89,15 +89,19 @@
       color: #bbb;
     }
 
-    #progressBar {
-      width: 100%;
-      margin-top: 5px;
-      appearance: none;
-      height: 6px;
-      background: linear-gradient(to right, #00bcd4, #66ccff);
-      border-radius: 3px;
-      outline: none;
-    }
+   #progressBar {
+  width: 100%;
+  margin-top: 5px;
+  appearance: none;
+  height: 4px;
+  background-color: transparent;
+  border-radius: 2px;
+  outline: none;
+  background-image: linear-gradient(to right, #aaa 0%, #aaa var(--progress), transparent var(--progress), transparent 100%);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  transition: background-image 0.3s ease;
+}
 
     #progressBar::-webkit-slider-thumb {
       appearance: none;
