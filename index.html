@@ -17,6 +17,9 @@
       background-color: rgba(0, 0, 0, 0.6);
       padding: 2rem;
       min-height: 100vh;
+      max-width: 800px;
+      margin: auto;
+      border-radius: 10px;
     }
     h1 {
       font-size: 2.5rem;
@@ -33,7 +36,7 @@
       display: block;
     }
     .lyrics {
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.2);
       padding: 1rem;
       margin: 2rem auto;
       width: 90%;
@@ -43,19 +46,24 @@
       max-height: 300px;
       font-size: 1rem;
       white-space: pre-wrap;
+      color: white;
     }
     .controls {
       margin-top: 1rem;
     }
     .controls button {
-      margin: 0.3rem;
-      padding: 0.5rem 1rem;
+      margin: 0.5rem;
+      padding: 0.8rem 1.5rem;
       border: none;
-      border-radius: 8px;
+      border-radius: 12px;
       cursor: pointer;
-      background-color: #ffffffaa;
+      background-color: rgba(255, 255, 255, 0.7);
       color: #333;
       font-weight: bold;
+      transition: background-color 0.3s;
+    }
+    .controls button:hover {
+      background-color: rgba(255, 255, 255, 1);
     }
     .song-list {
       margin-top: 1rem;
@@ -75,23 +83,41 @@
       cursor: pointer;
       text-decoration: underline;
     }
+    .progress-bar-container {
+      margin-top: 1rem;
+      max-width: 500px;
+      width: 90%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .progress-bar {
+      width: 100%;
+      max-width: 500px;
+      margin: 1rem auto;
+    }
   </style>
 </head>
 <body>
   <div class="overlay">
     <h1>Quiet Praise</h1>
     <p class="subtitle">愿你在旋律中与主相遇，安静灵里，得着安慰与力量 🕊️</p>
-
     <audio id="audio" controls></audio>
 
     <div class="controls">
       <button onclick="prevSong()">上一首</button>
       <button onclick="nextSong()">下一首</button>
       <button onclick="shuffleSong()">随机播放</button>
+      <button onclick="toggleRepeat()">单曲循环</button>
     </div>
 
     <div class="lyrics" id="lyrics"></div>
 
+    <!-- 播放进度条 -->
+    <div class="progress-bar-container">
+      <input type="range" id="progressBar" class="progress-bar" value="0" max="100" step="1" onchange="setProgress(this.value)" />
+    </div>
+
+    <!-- 歌单显示 -->
     <details class="song-list">
       <summary>📖 展开/隐藏歌单</summary>
       <ul id="playlist"></ul>
@@ -100,9 +126,9 @@
 
   <script>
     const NOTION_JSON_URL = "https://lqxw-audio.oss-cn-beijing.aliyuncs.com/quiet-praise-data.json";
-
     let songs = [];
     let current = 0;
+    let isLooping = false;
 
     const audio = document.getElementById("audio");
     const lyricsBox = document.getElementById("lyrics");
@@ -119,7 +145,7 @@
       playlist.innerHTML = "";
       songs.forEach((song, index) => {
         const li = document.createElement("li");
-        li.textContent = song.title;
+        li.textContent = `${index + 1}. ${song.title}`;
         li.onclick = () => {
           current = index;
           loadSong(current);
@@ -138,6 +164,11 @@
     }
 
     function nextSong() {
+      if (isLooping) {
+        loadSong(current);
+        audio.play();
+        return;
+      }
       current = (current + 1) % songs.length;
       loadSong(current);
       audio.play();
@@ -158,6 +189,19 @@
       loadSong(current);
       audio.play();
     }
+
+    function toggleRepeat() {
+      isLooping = !isLooping;
+    }
+
+    function setProgress(value) {
+      audio.currentTime = (value / 100) * audio.duration;
+    }
+
+    audio.addEventListener("timeupdate", function () {
+      const progress = (audio.currentTime / audio.duration) * 100;
+      document.getElementById("progressBar").value = progress;
+    });
 
     function highlightPlaylist(index) {
       const items = document.querySelectorAll("#playlist li");
