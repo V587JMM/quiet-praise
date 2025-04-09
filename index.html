@@ -132,9 +132,13 @@
 
                 // Function to play or pause
                 document.getElementById('playPause').addEventListener('click', () => {
-                    if (audioPlayer.paused) {
-                        audioPlayer.play();
-                        document.getElementById('playPause').textContent = "暂停";
+                    if (audioPlayer.paused || audioPlayer.ended) {
+                        audioPlayer.play().then(() => {
+                            document.getElementById('playPause').textContent = "暂停";
+                        }).catch(error => {
+                            console.error("音频播放错误:", error);
+                            alert("播放音频时出错，请检查音频文件链接");
+                        });
                     } else {
                         audioPlayer.pause();
                         document.getElementById('playPause').textContent = "播放";
