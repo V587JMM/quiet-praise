@@ -354,6 +354,20 @@
           totalTimeDisplay.textContent = formatTime(total);
         });
 
+        audioPlayer.addEventListener("ended", () => {
+  if (playMode === "loop") {
+    audioPlayer.play();
+  } else if (playMode === "shuffle") {
+    currentSongIndex = Math.floor(Math.random() * songsData.length);
+    updateSongDetails();
+    audioPlayer.play();
+  } else {
+    currentSongIndex = (currentSongIndex + 1) % songsData.length;
+    updateSongDetails();
+    audioPlayer.play();
+  }
+});
+
         progressBar.addEventListener("input", () => {
           const total = audioPlayer.duration;
           audioPlayer.currentTime = (progressBar.value / 100) * total;
