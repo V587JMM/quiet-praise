@@ -152,27 +152,3 @@
                     currentSongIndex = (currentSongIndex + 1) % songsData.length;
                     updateSongDetails();
                     audioPlayer.play();
-                    document.getElementById('playPause').textContent = "暂停";
-                });
-
-                // Generate the song list
-                const songListContainer = document.getElementById('songList');
-                songsData.forEach((song, index) => {
-                    const songItem = document.createElement('li');
-                    songItem.textContent = song.title;
-                    songItem.addEventListener('click', () => {
-                        currentSongIndex = index;
-                        updateSongDetails();
-                        audioPlayer.play();
-                        document.getElementById('playPause').textContent = "暂停";
-                    });
-                    songListContainer.appendChild(songItem);
-                });
-
-                // Initialize the first song
-                updateSongDetails();
-            })
-            .catch(error => console.error('Error fetching song data:', error));
-    </script>
-</body>
-</html>
