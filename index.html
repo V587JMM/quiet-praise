@@ -8,7 +8,7 @@
     body {
       margin: 0;
       font-family: "Helvetica Neue", sans-serif;
-      background: #003b5c;
+      background: #2a2a2a;
       color: white;
       text-align: center;
     }
@@ -25,25 +25,25 @@
       font-size: 1.2rem;
       margin-bottom: 2rem;
     }
-    .player {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-top: 2rem;
+    .album-cover {
+      width: 300px;
+      height: 300px;
+      background-color: #333;
+      border-radius: 50%;
+      margin: 0 auto;
+      position: relative;
+      overflow: hidden;
     }
-    audio {
+    .album-cover img {
       width: 100%;
-      max-width: 500px;
-      margin: 1rem auto;
-      display: block;
+      height: 100%;
+      object-fit: cover;
     }
     .controls {
-      margin-top: 1rem;
-      display: flex;
-      justify-content: center;
-      gap: 1rem;
+      margin-top: 2rem;
     }
     .controls button {
+      margin: 0.3rem;
       padding: 0.5rem 1rem;
       border: none;
       border-radius: 8px;
@@ -53,125 +53,138 @@
       font-weight: bold;
     }
     .song-title {
-      font-size: 1.5rem;
+      font-size: 1.8rem;
       margin-top: 1rem;
+    }
+    .song-details {
+      font-size: 1rem;
+      margin-top: 0.5rem;
     }
     .song-list {
       margin-top: 2rem;
     }
-    details summary {
-      cursor: pointer;
-      font-size: 1.2rem;
-      margin: 1rem;
-    }
-    ul {
+    .song-list ul {
       list-style: none;
       padding: 0;
     }
-    li {
-      margin: 0.5rem 0;
+    .song-list li {
       cursor: pointer;
-      text-decoration: underline;
+      padding: 0.3rem;
+      border-bottom: 1px solid #fff;
+    }
+    .song-list li:hover {
+      background-color: #444;
+    }
+    .lyrics {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 1rem;
+      margin: 2rem auto;
+      width: 90%;
+      max-width: 500px;
+      border-radius: 10px;
+      overflow-y: auto;
+      max-height: 300px;
+      font-size: 1rem;
+      white-space: pre-wrap;
+    }
+    .player-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      margin-top: 2rem;
+    }
+    .player-button {
+      margin: 1rem;
+    }
+    .player-buttons {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+    }
+    .player-controls {
+      display: flex;
+      gap: 10px;
+      align-items: center;
     }
   </style>
 </head>
 <body>
   <div class="overlay">
-    <h1>Quiet Praise</h1>
-    <p class="subtitle">愿你在旋律中与主相遇，安静灵里，得着安慰与力量 🕊️</p>
-
-    <div class="player">
-      <audio id="audio" controls></audio>
-
-      <div class="song-title" id="song-title">当前歌曲</div>
-
-      <div class="controls">
-        <button onclick="prevSong()">上一首</button>
-        <button onclick="playPause()">播放/暂停</button>
-        <button onclick="nextSong()">下一首</button>
-        <button onclick="shuffleSong()">随机播放</button>
-        <button onclick="repeatSong()">单曲循环</button>
-      </div>
-
-      <details class="song-list">
-        <summary>📖 展开/隐藏歌单</summary>
-        <ul id="playlist"></ul>
-      </details>
+    <div class="album-cover">
+      <img src="your_album_cover_image_url.jpg" alt="Album Cover" />
     </div>
+    <div class="song-title">夕阳无限好</div>
+    <div class="song-details">作词：林夕 &bull; 作曲：Eric Kwok</div>
+
+    <div class="player-container">
+      <div class="player-controls">
+        <button class="player-button">上一首</button>
+        <button class="player-button">播放</button>
+        <button class="player-button">下一首</button>
+      </div>
+      <div class="player-buttons">
+        <button class="player-button">随机播放</button>
+        <button class="player-button">单曲循环</button>
+      </div>
+    </div>
+
+    <div class="lyrics" id="lyrics">
+      <p>歌词内容显示在这里...</p>
+    </div>
+
+    <div class="song-list">
+      <ul id="playlist">
+        <!-- 歌单内容 -->
+        <li>你坐着为王</li>
+        <li>第109首 求你开我信心的眼睛</li>
+        <li>第260首 凡事都有神的美意</li>
+        <li>第559首 这是我的手</li>
+      </ul>
+    </div>
+
   </div>
 
   <script>
-    const NOTION_JSON_URL = "https://lqxw-audio.oss-cn-beijing.aliyuncs.com/quiet-praise-data.json";
-
-    let songs = [];
-    let current = 0;
-    let audio = document.getElementById("audio");
-    let songTitle = document.getElementById("song-title");
-    let playlist = document.getElementById("playlist");
-
-    async function fetchSongs() {
-      const res = await fetch(NOTION_JSON_URL);
-      songs = await res.json();
-      renderPlaylist();
-      loadSong(current);
-    }
+    // 添加播放控制和其他功能的逻辑
+    const playlist = document.getElementById('playlist');
+    const lyricsBox = document.getElementById('lyrics');
+    let songs = [
+      { title: "你坐着为王", lyrics: "歌词内容..." },
+      { title: "第109首 求你开我信心的眼睛", lyrics: "歌词内容..." },
+      { title: "第260首 凡事都有神的美意", lyrics: "歌词内容..." },
+      { title: "第559首 这是我的手", lyrics: "歌词内容..." }
+    ];
+    let currentSong = 0;
 
     function renderPlaylist() {
-      playlist.innerHTML = "";
+      playlist.innerHTML = '';
       songs.forEach((song, index) => {
         const li = document.createElement("li");
         li.textContent = song.title;
-        li.onclick = () => {
-          current = index;
-          loadSong(current);
-          audio.play();
-        };
+        li.onclick = () => loadSong(index);
         playlist.appendChild(li);
       });
     }
 
     function loadSong(index) {
-      if (!songs[index]) return;
       const song = songs[index];
-      audio.src = song.src;
-      songTitle.textContent = song.title;
+      document.querySelector('.song-title').textContent = song.title;
+      lyricsBox.textContent = song.lyrics;
     }
 
     function nextSong() {
-      current = (current + 1) % songs.length;
-      loadSong(current);
-      audio.play();
+      currentSong = (currentSong + 1) % songs.length;
+      loadSong(currentSong);
     }
 
     function prevSong() {
-      current = (current - 1 + songs.length) % songs.length;
-      loadSong(current);
-      audio.play();
+      currentSong = (currentSong - 1 + songs.length) % songs.length;
+      loadSong(currentSong);
     }
 
-    function playPause() {
-      if (audio.paused) {
-        audio.play();
-      } else {
-        audio.pause();
-      }
-    }
-
-    function shuffleSong() {
-      let rand;
-      do {
-        rand = Math.floor(Math.random() * songs.length);
-      } while (rand === current);
-      current = rand;
-      loadSong(current);
-      audio.play();
-    }
-
-    function repeatSong() {
-      audio.loop = !audio.loop;
-    }
-
-    fetchSongs();
+    renderPlaylist();
   </script>
 </body>
 </html>
