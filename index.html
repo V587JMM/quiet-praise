@@ -15,6 +15,7 @@
       background-color: #1e1e1e;
       color: white;
       font-family: Arial, sans-serif;
+      overflow-x: hidden; /* 防止水平滚动 */
     }
 
     .container {
@@ -22,6 +23,7 @@
       margin: 0 auto;
       padding: 20px;
       text-align: center;
+      position: relative;
     }
 
     .album-cover {
@@ -55,6 +57,11 @@
       justify-content: space-around;
       margin: 20px 0;
       flex-wrap: wrap;
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 20;
     }
 
     .control-button {
@@ -65,10 +72,6 @@
       padding: 12px;
       color: white;
       cursor: pointer;
-    }
-
-    .control-button.active {
-      background-color: #666;
     }
 
     .progress-container {
@@ -121,6 +124,10 @@
       display: flex;
       flex-direction: column;
       transition: top 0.4s ease;
+      padding: 20px;
+      color: #ccc;
+      font-size: 14px;
+      overflow-y: auto;
     }
 
     .lyrics-slide.active {
@@ -130,19 +137,14 @@
     .lyrics-header {
       padding: 10px;
       text-align: left;
-    }
-
-    .lyrics {
-      padding: 20px;
-      font-size: 14px;
-      color: #ccc;
-      text-align: left;
-      overflow-y: auto;
+      font-size: 18px;
+      font-weight: bold;
+      color: #fff;
     }
 
     .songlist-toggle {
       position: fixed;
-      bottom: 20px;
+      bottom: 90px;
       right: 20px;
       z-index: 10;
     }
