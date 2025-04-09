@@ -32,10 +32,6 @@
             font-size: 24px;
             margin: 10px 0;
         }
-        /* .song-info {
-            font-size: 16px;
-            margin-bottom: 20px;
-        } */
         .controls {
             display: flex;
             justify-content: center;
@@ -88,13 +84,10 @@
 <body>
     <div class="container">
         <!-- Album Cover -->
-        <img src="your_album_cover_image_url.jpg" alt="Album Cover" class="album-cover">
+        <img src="https://lqxw-audio.oss-cn-beijing.aliyuncs.com/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20250409111134.jpg" alt="Album Cover" class="album-cover">
 
         <!-- Song Title -->
         <div class="song-title" id="songTitle">你坐着为王</div>
-        
-        <!-- Info section is commented out -->
-        <!-- <div class="song-info" id="songInfo">作词：林夕 &middot; 作曲：Eric Kwok</div> -->
 
         <!-- Controls -->
         <div class="controls">
@@ -122,12 +115,11 @@
             .then(response => response.json())
             .then(songsData => {
                 let currentSongIndex = 0;
-                const audioPlayer = new Audio(songsData[currentSongIndex].src);
+                const audioPlayer = new Audio(songsData[currentSongIndex].src); // Use src from JSON
 
                 // Function to update song details
                 function updateSongDetails() {
                     document.getElementById('songTitle').textContent = songsData[currentSongIndex].title;
-                    // document.getElementById('songInfo').innerHTML = songsData[currentSongIndex].info; // info section is removed
                     document.getElementById('lyricsDisplay').textContent = songsData[currentSongIndex].lyrics;
                     audioPlayer.src = songsData[currentSongIndex].src;
                 }
