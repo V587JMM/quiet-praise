@@ -1,232 +1,180 @@
 <!DOCTYPE html>
 <html lang="zh-Hans">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Quiet Praise｜泉芯</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: "Helvetica Neue", sans-serif;
-      background: #2a2a2a;
-      color: white;
-      text-align: center;
-    }
-    .overlay {
-      background-color: rgba(0, 0, 0, 0.6);
-      padding: 2rem;
-      min-height: 100vh;
-    }
-    h1 {
-      font-size: 2.5rem;
-      margin-bottom: 0.5rem;
-    }
-    .subtitle {
-      font-size: 1.2rem;
-      margin-bottom: 2rem;
-    }
-    .album-cover {
-      width: 300px;
-      height: 300px;
-      background-color: #333;
-      border-radius: 50%;
-      margin: 0 auto;
-      position: relative;
-      overflow: hidden;
-    }
-    .album-cover img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    .controls {
-      margin-top: 2rem;
-    }
-    .controls button {
-      margin: 0.3rem;
-      padding: 0.5rem 1rem;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      background-color: #ffffffaa;
-      color: #333;
-      font-weight: bold;
-    }
-    .song-title {
-      font-size: 1.8rem;
-      margin-top: 1rem;
-    }
-    .song-details {
-      font-size: 1rem;
-      margin-top: 0.5rem;
-    }
-    .song-list {
-      margin-top: 2rem;
-    }
-    .song-list ul {
-      list-style: none;
-      padding: 0;
-    }
-    .song-list li {
-      cursor: pointer;
-      padding: 0.3rem;
-      border-bottom: 1px solid #fff;
-    }
-    .song-list li:hover {
-      background-color: #444;
-    }
-    .lyrics {
-      background: rgba(255, 255, 255, 0.1);
-      padding: 1rem;
-      margin: 2rem auto;
-      width: 90%;
-      max-width: 500px;
-      border-radius: 10px;
-      overflow-y: auto;
-      max-height: 300px;
-      font-size: 1rem;
-      white-space: pre-wrap;
-    }
-    .player-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      margin-top: 2rem;
-    }
-    .player-button {
-      margin: 1rem;
-    }
-    .player-buttons {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 1rem;
-    }
-    .player-controls {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiet Praise</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1e1e1e;
+            color: white;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #333;
+            border-radius: 10px;
+        }
+        .album-cover {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 20px;
+            border: 5px solid #ffffff;
+        }
+        .song-title {
+            font-size: 24px;
+            margin: 10px 0;
+        }
+        .song-info {
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .control-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #444;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .control-button:hover {
+            background-color: #666;
+        }
+        .lyrics {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #ccc;
+            text-align: left;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #222;
+            height: 150px;
+            overflow-y: auto;
+        }
+        .song-list {
+            margin-top: 30px;
+            text-align: left;
+        }
+        .song-list ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .song-list li {
+            margin: 5px 0;
+            cursor: pointer;
+            text-decoration: underline;
+            color: #00bcd4;
+        }
+        .song-list li:hover {
+            color: #fff;
+        }
+    </style>
 </head>
 <body>
-  <div class="overlay">
-    <div class="album-cover">
-      <img src="your_album_cover_image_url.jpg" alt="Album Cover" />
+    <div class="container">
+        <!-- Album Cover -->
+        <img src="your_album_cover_image_url.jpg" alt="Album Cover" class="album-cover">
+
+        <!-- Song Title and Info -->
+        <div class="song-title" id="songTitle">你坐着为王</div>
+        <div class="song-info" id="songInfo">作词：林夕 &middot; 作曲：Eric Kwok</div>
+
+        <!-- Controls -->
+        <div class="controls">
+            <button class="control-button" id="prevSong">上一首</button>
+            <button class="control-button" id="playPause">播放</button>
+            <button class="control-button" id="nextSong">下一首</button>
+        </div>
+
+        <!-- Lyrics Display -->
+        <div class="lyrics" id="lyricsDisplay">
+            歌词内容...
+        </div>
+
+        <!-- Song List -->
+        <div class="song-list">
+            <ul id="songList">
+                <!-- Song list will be dynamically generated -->
+            </ul>
+        </div>
     </div>
-    <div class="song-title">夕阳无限好</div>
-    <div class="song-details">作词：林夕 &bull; 作曲：Eric Kwok</div>
 
-    <div class="player-container">
-      <div class="player-controls">
-        <button class="player-button" onclick="prevSong()">上一首</button>
-        <button class="player-button" onclick="togglePlayPause()">播放</button>
-        <button class="player-button" onclick="nextSong()">下一首</button>
-      </div>
-      <div class="player-buttons">
-        <button class="player-button" onclick="shuffleSong()">随机播放</button>
-        <button class="player-button" onclick="toggleLoop()">单曲循环</button>
-      </div>
-    </div>
+    <script>
+        // Fetching the JSON file containing song data
+        fetch('https://lqxw-audio.oss-cn-beijing.aliyuncs.com/quiet-praise-data.json')
+            .then(response => response.json())
+            .then(songsData => {
+                let currentSongIndex = 0;
+                const audioPlayer = new Audio(songsData[currentSongIndex].audioLink);
 
-    <div class="lyrics" id="lyrics">
-      <p>歌词内容显示在这里...</p>
-    </div>
+                // Function to update song details
+                function updateSongDetails() {
+                    document.getElementById('songTitle').textContent = songsData[currentSongIndex].title;
+                    document.getElementById('songInfo').innerHTML = songsData[currentSongIndex].info;
+                    document.getElementById('lyricsDisplay').textContent = songsData[currentSongIndex].lyrics;
+                    audioPlayer.src = songsData[currentSongIndex].audioLink;
+                }
 
-    <div class="song-list">
-      <ul id="playlist">
-        <li onclick="loadSong(0)">你坐着为王</li>
-        <li onclick="loadSong(1)">第109首 求你开我信心的眼睛</li>
-        <li onclick="loadSong(2)">第260首 凡事都有神的美意</li>
-        <li onclick="loadSong(3)">第559首 这是我的手</li>
-      </ul>
-    </div>
-  </div>
+                // Function to play or pause
+                document.getElementById('playPause').addEventListener('click', () => {
+                    if (audioPlayer.paused) {
+                        audioPlayer.play();
+                        document.getElementById('playPause').textContent = "暂停";
+                    } else {
+                        audioPlayer.pause();
+                        document.getElementById('playPause').textContent = "播放";
+                    }
+                });
 
-  <script>
-    const songs = [
-      { title: "你坐着为王", lyrics: "歌词内容..." },
-      { title: "第109首 求你开我信心的眼睛", lyrics: "歌词内容..." },
-      { title: "第260首 凡事都有神的美意", lyrics: "歌词内容..." },
-      { title: "第559首 这是我的手", lyrics: "歌词内容..." }
-    ];
-    let currentSong = 0;
-    let isPlaying = false;
-    let isLooping = false;
+                // Function to go to the previous song
+                document.getElementById('prevSong').addEventListener('click', () => {
+                    currentSongIndex = (currentSongIndex - 1 + songsData.length) % songsData.length;
+                    updateSongDetails();
+                    audioPlayer.play();
+                    document.getElementById('playPause').textContent = "暂停";
+                });
 
-    const audio = new Audio();
-    const lyricsBox = document.getElementById("lyrics");
-    const songTitle = document.querySelector(".song-title");
+                // Function to go to the next song
+                document.getElementById('nextSong').addEventListener('click', () => {
+                    currentSongIndex = (currentSongIndex + 1) % songsData.length;
+                    updateSongDetails();
+                    audioPlayer.play();
+                    document.getElementById('playPause').textContent = "暂停";
+                });
 
-    function renderPlaylist() {
-      const playlist = document.getElementById("playlist");
-      playlist.innerHTML = '';
-      songs.forEach((song, index) => {
-        const li = document.createElement("li");
-        li.textContent = song.title;
-        li.onclick = () => loadSong(index);
-        playlist.appendChild(li);
-      });
-    }
+                // Generate the song list
+                const songListContainer = document.getElementById('songList');
+                songsData.forEach((song, index) => {
+                    const songItem = document.createElement('li');
+                    songItem.textContent = song.title;
+                    songItem.addEventListener('click', () => {
+                        currentSongIndex = index;
+                        updateSongDetails();
+                        audioPlayer.play();
+                        document.getElementById('playPause').textContent = "暂停";
+                    });
+                    songListContainer.appendChild(songItem);
+                });
 
-    function loadSong(index) {
-      const song = songs[index];
-      songTitle.textContent = song.title;
-      lyricsBox.textContent = song.lyrics;
-      audio.src = song.src || "path_to_song_file.mp3";
-      audio.play();
-      isPlaying = true;
-      updatePlayPauseButton();
-    }
-
-    function nextSong() {
-      currentSong = (currentSong + 1) % songs.length;
-      loadSong(currentSong);
-    }
-
-    function prevSong() {
-      currentSong = (currentSong - 1 + songs.length) % songs.length;
-      loadSong(currentSong);
-    }
-
-    function shuffleSong() {
-      let randomIndex = Math.floor(Math.random() * songs.length);
-      while (randomIndex === currentSong) {
-        randomIndex = Math.floor(Math.random() * songs.length);
-      }
-      currentSong = randomIndex;
-      loadSong(currentSong);
-    }
-
-    function togglePlayPause() {
-      if (isPlaying) {
-        audio.pause();
-      } else {
-        audio.play();
-      }
-      isPlaying = !isPlaying;
-      updatePlayPauseButton();
-    }
-
-    function toggleLoop() {
-      isLooping = !isLooping;
-      audio.loop = isLooping;
-      updateLoopButton();
-    }
-
-    function updatePlayPauseButton() {
-      const playPauseButton = document.querySelector(".player-buttons button:nth-child(1)");
-      playPauseButton.textContent = isPlaying ? "暂停" : "播放";
-    }
-
-    function updateLoopButton() {
-      const loopButton = document.querySelector(".player-buttons button:nth-child(2)");
-      loopButton.textContent = isLooping ? "取消循环" : "单曲循环";
-    }
-
-    renderPlaylist();
-    loadSong(currentSong);
-  </script>
+                // Initialize the first song
+                updateSongDetails();
+            })
+            .catch(error => console.error('Error fetching song data:', error));
+    </script>
 </body>
 </html>
