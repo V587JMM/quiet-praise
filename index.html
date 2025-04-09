@@ -32,10 +32,10 @@
             font-size: 24px;
             margin: 10px 0;
         }
-        .song-info {
+        /* .song-info {
             font-size: 16px;
             margin-bottom: 20px;
-        }
+        } */
         .controls {
             display: flex;
             justify-content: center;
@@ -90,9 +90,11 @@
         <!-- Album Cover -->
         <img src="your_album_cover_image_url.jpg" alt="Album Cover" class="album-cover">
 
-        <!-- Song Title and Info -->
+        <!-- Song Title -->
         <div class="song-title" id="songTitle">你坐着为王</div>
-        <!-- <div class="song-info" id="songInfo">作词：林夕 &middot; 作曲：Eric Kwok</div>
+        
+        <!-- Info section is commented out -->
+        <!-- <div class="song-info" id="songInfo">作词：林夕 &middot; 作曲：Eric Kwok</div> -->
 
         <!-- Controls -->
         <div class="controls">
@@ -121,22 +123,13 @@
             .then(songsData => {
                 let currentSongIndex = 0;
                 const audioPlayer = new Audio(songsData[currentSongIndex].src);
-                audioPlayer.preload = "auto";  // 预加载音频
-               // 音频已准备好播放
-                audioPlayer.oncanplay = () => {
-                    console.log("音频已准备好播放");
-                };
-                // 捕获音频加载错误
-                audioPlayer.onerror = (e) => {
-                    console.error("音频加载失败:", e);
-                    alert("加载音频时出现错误，请检查音频文件链接或权限");
-                };
+
                 // Function to update song details
                 function updateSongDetails() {
                     document.getElementById('songTitle').textContent = songsData[currentSongIndex].title;
-                    //document.getElementById('songInfo').innerHTML = songsData[currentSongIndex].info;
+                    // document.getElementById('songInfo').innerHTML = songsData[currentSongIndex].info; // info section is removed
                     document.getElementById('lyricsDisplay').textContent = songsData[currentSongIndex].lyrics;
-                    audioPlayer.src = songsData[currentSongIndex].audioLink;
+                    audioPlayer.src = songsData[currentSongIndex].src;
                 }
 
                 // Function to play or pause
