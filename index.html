@@ -96,6 +96,13 @@
             <button class="control-button" id="nextSong">下一首</button>
         </div>
 
+        <!-- Play Mode Controls -->
+        <div class="controls">
+            <button class="control-button" id="loopMode">单曲循环</button>
+            <button class="control-button" id="sequenceMode">顺序播放</button>
+            <button class="control-button" id="shuffleMode">随机播放</button>
+        </div>
+
         <!-- Lyrics Display -->
         <div class="lyrics" id="lyricsDisplay">
             歌词内容...
@@ -115,6 +122,7 @@
             .then(response => response.json())
             .then(songsData => {
                 let currentSongIndex = 0;
+                let playMode = 'sequence';  // Default to sequence play
                 const audioPlayer = new Audio(songsData[currentSongIndex].src); // Use src from JSON
 
                 // Function to update song details
@@ -141,7 +149,11 @@
 
                 // Function to go to the previous song
                 document.getElementById('prevSong').addEventListener('click', () => {
-                    currentSongIndex = (currentSongIndex - 1 + songsData.length) % songsData.length;
+                    if (playMode === 'sequence') {
+                        currentSongIndex = (currentSongIndex - 1 + songsData.length) % songsData.length;
+                    } else if (playMode === 'shuffle') {
+                        currentSongIndex = Math.floor(Math.random() * songsData.length);
+                    }
                     updateSongDetails();
                     audioPlayer.play();
                     document.getElementById('playPause').textContent = "暂停";
@@ -149,10 +161,35 @@
 
                 // Function to go to the next song
                 document.getElementById('nextSong').addEventListener('click', () => {
-                    currentSongIndex = (currentSongIndex + 1) % songsData.length;
+                    if (playMode === 'sequence') {
+                        currentSongIndex = (currentSongIndex + 1) % songsData.length;
+                    } else if (playMode === 'shuffle') {
+                        currentSongIndex = Math.floor(Math.random() * songsData.length);
+                    }
                     updateSongDetails();
                     audioPlayer.play();
                     document.getElementById('playPause').textContent = "暂停";
+                });
+
+                // Loop mode
+                document.getElementById('loopMode').addEventListener('click', () => {
+                    playMode = 'loop';
+                    audioPlayer.loop = true;
+                    alert('已开启单曲循环');
+                });
+
+                // Sequence mode (default)
+                document.getElementById('sequenceMode').addEventListener('click', () => {
+                    playMode = 'sequence';
+                    audioPlayer.loop = false;
+                    alert('已开启顺序播放');
+                });
+
+                // Shuffle mode
+                document.getElementById('shuffleMode').addEventListener('click', () => {
+                    playMode = 'shuffle';
+                    audioPlayer.loop = false;
+                    alert('已开启随机播放');
                 });
 
                 // Generate the song list
