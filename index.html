@@ -120,13 +120,13 @@
 
     <div class="player-container">
       <div class="player-controls">
-        <button class="player-button">上一首</button>
-        <button class="player-button">播放</button>
-        <button class="player-button">下一首</button>
+        <button class="player-button" onclick="prevSong()">上一首</button>
+        <button class="player-button" onclick="togglePlayPause()">播放</button>
+        <button class="player-button" onclick="nextSong()">下一首</button>
       </div>
       <div class="player-buttons">
-        <button class="player-button">随机播放</button>
-        <button class="player-button">单曲循环</button>
+        <button class="player-button" onclick="shuffleSong()">随机播放</button>
+        <button class="player-button" onclick="toggleLoop()">单曲循环</button>
       </div>
     </div>
 
@@ -136,29 +136,31 @@
 
     <div class="song-list">
       <ul id="playlist">
-        <!-- 歌单内容 -->
-        <li>你坐着为王</li>
-        <li>第109首 求你开我信心的眼睛</li>
-        <li>第260首 凡事都有神的美意</li>
-        <li>第559首 这是我的手</li>
+        <li onclick="loadSong(0)">你坐着为王</li>
+        <li onclick="loadSong(1)">第109首 求你开我信心的眼睛</li>
+        <li onclick="loadSong(2)">第260首 凡事都有神的美意</li>
+        <li onclick="loadSong(3)">第559首 这是我的手</li>
       </ul>
     </div>
-
   </div>
 
   <script>
-    // 添加播放控制和其他功能的逻辑
-    const playlist = document.getElementById('playlist');
-    const lyricsBox = document.getElementById('lyrics');
-    let songs = [
+    const songs = [
       { title: "你坐着为王", lyrics: "歌词内容..." },
       { title: "第109首 求你开我信心的眼睛", lyrics: "歌词内容..." },
       { title: "第260首 凡事都有神的美意", lyrics: "歌词内容..." },
       { title: "第559首 这是我的手", lyrics: "歌词内容..." }
     ];
     let currentSong = 0;
+    let isPlaying = false;
+    let isLooping = false;
+
+    const audio = new Audio();
+    const lyricsBox = document.getElementById("lyrics");
+    const songTitle = document.querySelector(".song-title");
 
     function renderPlaylist() {
+      const playlist = document.getElementById("playlist");
       playlist.innerHTML = '';
       songs.forEach((song, index) => {
         const li = document.createElement("li");
@@ -170,8 +172,12 @@
 
     function loadSong(index) {
       const song = songs[index];
-      document.querySelector('.song-title').textContent = song.title;
+      songTitle.textContent = song.title;
       lyricsBox.textContent = song.lyrics;
+      audio.src = song.src || "path_to_song_file.mp3";
+      audio.play();
+      isPlaying = true;
+      updatePlayPauseButton();
     }
 
     function nextSong() {
@@ -184,7 +190,43 @@
       loadSong(currentSong);
     }
 
+    function shuffleSong() {
+      let randomIndex = Math.floor(Math.random() * songs.length);
+      while (randomIndex === currentSong) {
+        randomIndex = Math.floor(Math.random() * songs.length);
+      }
+      currentSong = randomIndex;
+      loadSong(currentSong);
+    }
+
+    function togglePlayPause() {
+      if (isPlaying) {
+        audio.pause();
+      } else {
+        audio.play();
+      }
+      isPlaying = !isPlaying;
+      updatePlayPauseButton();
+    }
+
+    function toggleLoop() {
+      isLooping = !isLooping;
+      audio.loop = isLooping;
+      updateLoopButton();
+    }
+
+    function updatePlayPauseButton() {
+      const playPauseButton = document.querySelector(".player-buttons button:nth-child(1)");
+      playPauseButton.textContent = isPlaying ? "暂停" : "播放";
+    }
+
+    function updateLoopButton() {
+      const loopButton = document.querySelector(".player-buttons button:nth-child(2)");
+      loopButton.textContent = isLooping ? "取消循环" : "单曲循环";
+    }
+
     renderPlaylist();
+    loadSong(currentSong);
   </script>
 </body>
 </html>
