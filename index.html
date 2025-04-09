@@ -52,6 +52,8 @@
       <ul id="songList" class="song-list-ul"></ul>
     </div>
   </div>
+  <head>
+  <style>
 /* 歌词滑出层 */
 .lyrics-slide {
   position: fixed;
@@ -145,6 +147,8 @@
   color: #fff;
   font-weight: bold;
 }
+      </style>
+</head>
 <script>
   fetch("https://lqxw-audio.oss-cn-beijing.aliyuncs.com/quiet-praise-data.json")
     .then((res) => res.json())
