@@ -181,6 +181,14 @@
       });
     }
 
+    window.addEventListener('load', function () {
+      // 设置Cusdis为中文，去掉Email
+      window.Cusdis = window.Cusdis || {};
+      window.Cusdis.lang = 'zh-CN';  // 设置为中文
+      window.Cusdis.title = 'Quiet Praise 留言区'; // 自定义标题
+      window.Cusdis.no_email = true;  // 去除Email选项
+    });
+
     fetchSongs();
   </script>
 </body>
