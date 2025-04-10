@@ -383,6 +383,23 @@
           lyricsPanel.classList.remove("active");
         });
 
+        // 处理上一首和下一首
+        document.getElementById("prevSong").addEventListener("click", () => {
+          currentSongIndex =
+            (currentSongIndex - 1 + songsData.length) % songsData.length;
+          updateSongDetails();
+          audioPlayer.play();
+          playPauseIcon.className = "fas fa-pause";
+        });
+
+        document.getElementById("nextSong").addEventListener("click", () => {
+          currentSongIndex =
+            (currentSongIndex + 1) % songsData.length;
+          updateSongDetails();
+          audioPlayer.play();
+          playPauseIcon.className = "fas fa-pause";
+        });
+
         updateSongDetails();
         updateModeHighlight();
       });
