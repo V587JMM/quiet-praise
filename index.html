@@ -385,16 +385,24 @@
 
         // 处理上一首和下一首
         document.getElementById("prevSong").addEventListener("click", () => {
-          currentSongIndex =
-            (currentSongIndex - 1 + songsData.length) % songsData.length;
+          if (playMode === "shuffle") {
+            currentSongIndex = Math.floor(Math.random() * songsData.length);
+          } else {
+            currentSongIndex =
+              (currentSongIndex - 1 + songsData.length) % songsData.length;
+          }
           updateSongDetails();
           audioPlayer.play();
           playPauseIcon.className = "fas fa-pause";
         });
 
         document.getElementById("nextSong").addEventListener("click", () => {
-          currentSongIndex =
-            (currentSongIndex + 1) % songsData.length;
+          if (playMode === "shuffle") {
+            currentSongIndex = Math.floor(Math.random() * songsData.length);
+          } else {
+            currentSongIndex =
+              (currentSongIndex + 1) % songsData.length;
+          }
           updateSongDetails();
           audioPlayer.play();
           playPauseIcon.className = "fas fa-pause";
