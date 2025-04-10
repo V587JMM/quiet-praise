@@ -248,133 +248,144 @@
   </div>
 
   <script>
-  fetch("https://lqxw-audio.oss-cn-beijing.aliyuncs.com/quiet-praise-data.json")
-    .then((res) => res.json())
-    .then((songsData) => {
-      let currentSongIndex = 0;
-      let playMode = "sequence"; // 默认顺序播放
-      const audioPlayer = new Audio(songsData[currentSongIndex].src);
+    fetch("https://lqxw-audio.oss-cn-beijing.aliyuncs.com/quiet-praise-data.json")
+      .then((res) => res.json())
+      .then((songsData) => {
+        let currentSongIndex = 0;
+        let playMode = "sequence"; // 默认顺序播放
+        const audioPlayer = new Audio(songsData[currentSongIndex].src);
 
-      const playPauseBtn = document.getElementById("playPause");
-      const playPauseIcon = playPauseBtn.querySelector("i");
-      const progressBar = document.getElementById("progressBar");
-      const albumCover = document.getElementById("albumCover");
-      const currentTimeDisplay = document.getElementById("currentTime");
-      const totalTimeDisplay = document.getElementById("totalTime");
-      const lyricsDisplay = document.getElementById("lyricsDisplay");
-      const songTitle = document.getElementById("songTitle");
+        const playPauseBtn = document.getElementById("playPause");
+        const playPauseIcon = playPauseBtn.querySelector("i");
+        const progressBar = document.getElementById("progressBar");
+        const albumCover = document.getElementById("albumCover");
+        const currentTimeDisplay = document.getElementById("currentTime");
+        const totalTimeDisplay = document.getElementById("totalTime");
+        const lyricsDisplay = document.getElementById("lyricsDisplay");
+        const songTitle = document.getElementById("songTitle");
 
-      const modeButtons = {
-        loop: document.getElementById("loopMode"),
-        sequence: document.getElementById("sequenceMode"),
-        shuffle: document.getElementById("shuffleMode"),
-      };
+        const modeButtons = {
+          loop: document.getElementById("loopMode"),
+          sequence: document.getElementById("sequenceMode"),
+          shuffle: document.getElementById("shuffleMode"),
+        };
 
-      function formatTime(seconds) {
-        const m = Math.floor(seconds / 60).toString().padStart(2, "0");
-        const s = Math.floor(seconds % 60).toString().padStart(2, "0");
-        return `${m}:${s}`;
-      }
-
-      function updateSongDetails() {
-        audioPlayer.src = songsData[currentSongIndex].src;
-        songTitle.textContent = songsData[currentSongIndex].title;
-        lyricsDisplay.textContent = songsData[currentSongIndex].lyrics;
-      }
-
-      function updateModeHighlight() {
-        Object.values(modeButtons).forEach((btn) => btn.classList.remove("active"));
-        if (modeButtons[playMode]) {
-          modeButtons[playMode].classList.add("active");
+        function formatTime(seconds) {
+          const m = Math.floor(seconds / 60).toString().padStart(2, "0");
+          const s = Math.floor(seconds % 60).toString().padStart(2, "0");
+          return `${m}:${s}`;
         }
-      }
 
-      // 播放暂停
-      playPauseBtn.addEventListener("click", () => {
-        if (audioPlayer.paused) {
-          audioPlayer.play();
-          playPauseIcon.className = "fas fa-pause";
-          albumCover.classList.add("rotate");
-        } else {
-          audioPlayer.pause();
-          playPauseIcon.className = "fas fa-play";
-          albumCover.classList.remove("rotate");
+        function updateSongDetails() {
+          audioPlayer.src = songsData[currentSongIndex].src;
+          songTitle.textContent = songsData[currentSongIndex].title;
+          lyricsDisplay.textContent = songsData[currentSongIndex].lyrics;
         }
-      });
 
-      // 进度条更新
-      audioPlayer.addEventListener("timeupdate", () => {
-        const current = audioPlayer.currentTime;
-        const total = audioPlayer.duration || 0;
-        const percent = (current / total) * 100 || 0;
-        progressBar.value = percent;
-        progressBar.style.setProperty("--progress", `${percent}%`);
-        currentTimeDisplay.textContent = formatTime(current);
-        totalTimeDisplay.textContent = formatTime(total);
-      });
-
-      progressBar.addEventListener("input", () => {
-        const total = audioPlayer.duration;
-        audioPlayer.currentTime = (progressBar.value / 100) * total;
-      });
-
-      // 自动播放下一首
-      audioPlayer.addEventListener("ended", () => {
-        if (playMode === "loop") {
-          audioPlayer.play();
-        } else if (playMode === "shuffle") {
-          currentSongIndex = Math.floor(Math.random() * songsData.length);
-        } else {
-          currentSongIndex = (currentSongIndex + 1) % songsData.length;
+        function updateModeHighlight() {
+          Object.values(modeButtons).forEach((btn) => btn.classList.remove("active"));
+          if (modeButtons[playMode]) {
+            modeButtons[playMode].classList.add("active");
+          }
         }
-        updateSongDetails();
-        audioPlayer.play();
-        playPauseIcon.className = "fas fa-pause";
-      });
 
-      // 播放模式切换
-      document.getElementById("loopMode").addEventListener("click", () => {
-        playMode = "loop";
-        updateModeHighlight();
-      });
+        // 播放暂停
+        playPauseBtn.addEventListener("click", () => {
+          if (audioPlayer.paused) {
+            audioPlayer.play();
+            playPauseIcon.className = "fas fa-pause";
+            albumCover.classList.add("rotate");
+          } else {
+            audioPlayer.pause();
+            playPauseIcon.className = "fas fa-play";
+            albumCover.classList.remove("rotate");
+          }
+        });
 
-      document.getElementById("sequenceMode").addEventListener("click", () => {
-        playMode = "sequence";
-        updateModeHighlight();
-      });
+        // 进度条更新
+        audioPlayer.addEventListener("timeupdate", () => {
+          const current = audioPlayer.currentTime;
+          const total = audioPlayer.duration || 0;
+          const percent = (current / total) * 100 || 0;
+          progressBar.value = percent;
+          progressBar.style.setProperty("--progress", `${percent}%`);
+          currentTimeDisplay.textContent = formatTime(current);
+          totalTimeDisplay.textContent = formatTime(total);
+        });
 
-      document.getElementById("shuffleMode").addEventListener("click", () => {
-        playMode = "shuffle";
-        updateModeHighlight();
-      });
+        progressBar.addEventListener("input", () => {
+          const total = audioPlayer.duration;
+          audioPlayer.currentTime = (progressBar.value / 100) * total;
+        });
 
-      // 歌词展示
-      document.getElementById("openSongList").addEventListener("click", () => {
-        document.getElementById("songListPopup").classList.add("active");
-      });
-
-      document.getElementById("closeSongList").addEventListener("click", () => {
-        document.getElementById("songListPopup").classList.remove("active");
-      });
-
-      // 歌单点击切歌
-      const songListContainer = document.getElementById("songList");
-      songsData.forEach((song, index) => {
-        const li = document.createElement("li");
-        li.textContent = song.title;
-        li.addEventListener("click", () => {
-          currentSongIndex = index;
+        // 自动播放下一首
+        audioPlayer.addEventListener("ended", () => {
+          if (playMode === "loop") {
+            audioPlayer.play();
+          } else if (playMode === "shuffle") {
+            currentSongIndex = Math.floor(Math.random() * songsData.length);
+          } else {
+            currentSongIndex = (currentSongIndex + 1) % songsData.length;
+          }
           updateSongDetails();
           audioPlayer.play();
           playPauseIcon.className = "fas fa-pause";
+        });
+
+        // 播放模式切换
+        document.getElementById("loopMode").addEventListener("click", () => {
+          playMode = "loop";
+          updateModeHighlight();
+        });
+
+        document.getElementById("sequenceMode").addEventListener("click", () => {
+          playMode = "sequence";
+          updateModeHighlight();
+        });
+
+        document.getElementById("shuffleMode").addEventListener("click", () => {
+          playMode = "shuffle";
+          updateModeHighlight();
+        });
+
+        // 歌词显示功能
+        document.getElementById("openSongList").addEventListener("click", () => {
+          document.getElementById("songListPopup").classList.add("active");
+        });
+
+        document.getElementById("closeSongList").addEventListener("click", () => {
           document.getElementById("songListPopup").classList.remove("active");
         });
-        songListContainer.appendChild(li);
-      });
 
-      updateSongDetails();
-      updateModeHighlight();
-    });
+        // 歌单点击切歌
+        const songListContainer = document.getElementById("songList");
+        songsData.forEach((song, index) => {
+          const li = document.createElement("li");
+          li.textContent = song.title;
+          li.addEventListener("click", () => {
+            currentSongIndex = index;
+            updateSongDetails();
+            audioPlayer.play();
+            playPauseIcon.className = "fas fa-pause";
+            document.getElementById("songListPopup").classList.remove("active");
+          });
+          songListContainer.appendChild(li);
+        });
+
+        // 歌词按钮切换
+        albumCover.addEventListener("click", () => {
+          const lyricsPanel = document.getElementById("lyricsPanel");
+          lyricsPanel.classList.add("active");
+        });
+
+        document.getElementById("closeLyrics").addEventListener("click", () => {
+          const lyricsPanel = document.getElementById("lyricsPanel");
+          lyricsPanel.classList.remove("active");
+        });
+
+        updateSongDetails();
+        updateModeHighlight();
+      });
   </script>
 </body>
 </html>
