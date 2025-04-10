@@ -348,9 +348,33 @@
         updateModeHighlight();
       });
 
+      // 歌词展示
+      document.getElementById("openSongList").addEventListener("click", () => {
+        document.getElementById("songListPopup").classList.add("active");
+      });
+
+      document.getElementById("closeSongList").addEventListener("click", () => {
+        document.getElementById("songListPopup").classList.remove("active");
+      });
+
+      // 歌单点击切歌
+      const songListContainer = document.getElementById("songList");
+      songsData.forEach((song, index) => {
+        const li = document.createElement("li");
+        li.textContent = song.title;
+        li.addEventListener("click", () => {
+          currentSongIndex = index;
+          updateSongDetails();
+          audioPlayer.play();
+          playPauseIcon.className = "fas fa-pause";
+          document.getElementById("songListPopup").classList.remove("active");
+        });
+        songListContainer.appendChild(li);
+      });
+
       updateSongDetails();
       updateModeHighlight();
     });
-</script>
+  </script>
 </body>
 </html>
