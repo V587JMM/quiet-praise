@@ -112,29 +112,37 @@
     }
 
     .lyrics-container {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: #1e1e1e;
-      z-index: 10;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      overflow-y: auto;
-      transition: top 0.3s ease;
-      padding: 20px;
-      color: #fff;
-      font-size: 16px;
-      display: none; /* Hide initially */
-    }
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #1e1e1e;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow-y: auto;
+    transition: top 0.3s ease;
+    padding: 20px;
+    color: #fff;
+    font-size: 16px;
+    display: none; /* Hide initially */
+    text-align: center; /*居中显示*/
+  }
 
-    .lyrics-container.active {
-      display: flex;
-    }
+  .lyrics-container.active {
+    display: flex;
+  }
 
+  /* lyrics 内使用 white-space 处理换行 */
+  #lyricsDisplay {
+    white-space: pre-line; /* 使得换行符生效 */
+    word-wrap: break-word; /* 使长单词能换行 */
+    max-width: 90%; /* 可调节宽度 */
+    margin: 0 auto; /* 居中显示 */
+  }
     .songlist-toggle {
       position: fixed;
       bottom: 20px;
